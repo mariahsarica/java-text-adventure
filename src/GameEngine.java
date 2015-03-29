@@ -15,13 +15,7 @@ public class GameEngine {
 		
 		World.init();
 		
-		// Welcome message & starts player in lobby
-		System.out.println("Welcome to NATURE’S PANTRY, your favorite \n"
-				+ "alternative grocery store! \n"
-				+ "What was it that I needed to get again? Oh yeah, \n"
-				+ "almond milk and tofu. \n"
-				+ "Type 'h' for help or 'q' to quit. \n" 
-				+ World.locs.get(Player.currentLoc).getText());
+		welcomeMsg();
 
 		// Game loop
 		while(stillPlaying) {
@@ -29,6 +23,16 @@ public class GameEngine {
 			commandReader();
 		}
 	
+	}
+	
+	// Welcome message & starts player in lobby
+	private static void welcomeMsg() {
+		System.out.println("Welcome to NATURE’S PANTRY, your favorite \n"
+				+ "alternative grocery store! \n"
+				+ "What was it that I needed to get again? Oh yeah, \n"
+				+ "almond milk and tofu. \n"
+				+ "Type 'h' for help or 'q' to quit. \n" 
+				+ World.locs.get(Player.currentLoc).getText());
 	}
 	
 	// Quits game
@@ -41,44 +45,47 @@ public class GameEngine {
 	private static void getCommand() {
 		input = new Scanner(System.in);
 		command = input.nextLine();
+		command = command.toLowerCase();
 	}
 	
 	// Reads user command and performs proper action
 	private static void commandReader() {
 		
-		       if (command.equalsIgnoreCase("n")) {
+		       if (command.equals("n")) {
 			Player.move(0);
-		} else if (command.equalsIgnoreCase("s")) {
+		} else if (command.equals("s")) {
 			Player.move(1);
-		} else if (command.equalsIgnoreCase("e")) {
+		} else if (command.equals("e")) {
 			Player.move(2);
-		} else if (command.equalsIgnoreCase("w")) {
+		} else if (command.equals("w")) {
 			Player.move(3);
-		} else if (command.equalsIgnoreCase("t cart")) {
+		} else if (command.equals("t cart")) {
 			Player.takeCart(World.items.get(0));
-		} else if (command.equalsIgnoreCase("t flyer")) {
+		} else if (command.equals("t flyer")) {
 			Player.takeItem(World.items.get(1));
-		} else if (command.equalsIgnoreCase("t map")) {
+		} else if (command.equals("t map")) {
 			Player.takeItem(World.items.get(2));
-		} else if (command.equalsIgnoreCase("t quinoa")) {
+		} else if (command.equals("t quinoa")) {
 			Player.takeItem(World.items.get(4));
-		} else if (command.equalsIgnoreCase("t celery")) {
+		} else if (command.equals("t celery")) {
 			Player.takeItem(World.items.get(5));
-		} else if (command.equalsIgnoreCase("i")) {
+		} else if (command.equals("i")) {
 			Player.checkInv();
-		} else if (command.equalsIgnoreCase("m")) {
+		} else if (command.equals("m")) {
 			World.map();
-		} else if (command.equalsIgnoreCase("h")) {
+		} else if (command.equals("h")) {
 			help();
-		} else if (command.equalsIgnoreCase("q")) {
+		} else if (command.equals("q")) {
 			quit();
+		} else {
+			System.out.println("Invalid command.");
 		}
 	
 	}
 	
 	// Displays list of commands available to user
 	private static void help() {
-		System.out.println("Items available for interraction in each room are \n"
+		System.out.println("Items available for interaction in each room are \n"
 				+ "listed in CAPTIAL letters. The following commands \n"
 				+ "are permitted: \n"
 				+ "N - move north \n"

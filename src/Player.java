@@ -9,6 +9,7 @@ public class Player {
 
 	public static int currentLoc;
 	public static ArrayList<Item> inventory = new ArrayList<Item>();
+	public static int moves = 0;                                      // Keeps track of number of moves player has made
 	
 	public Player() {
 	}
@@ -73,6 +74,7 @@ public class Player {
 			System.out.println("You cannot go that way.");
 		} else {
 			currentLoc = newLoc;
+			moves = moves + 1;
 		}
 	   
 	    System.out.println(World.locs.get(currentLoc).getText());    

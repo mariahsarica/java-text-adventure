@@ -41,7 +41,7 @@ public class Location {
 	}
 	
 	public String getText() {
-		return this.description + "\n" + this.getDir();
+		return this.description + "\n" + this.getDir() + "\nMoves: " + Player.moves;
 	}
 
 }
