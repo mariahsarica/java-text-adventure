@@ -79,6 +79,14 @@ public class GameEngine {
 			} else {
 				System.out.println("Invalid command.");
 			}
+		} else if (command.equals("d")) {
+			String item = input.next();
+			if (search(item)) {
+				int index = getIndex(item);
+				Player.drop(World.items.get(index));
+			} else {
+				System.out.println("Invalid command.");
+			}
 		} else {
 			System.out.println("Invalid command.");
 		}
@@ -86,7 +94,7 @@ public class GameEngine {
 	
 	}
 	
-	// Used in take action - Searches ArrayList<Item> to see if it contains the item the user wants to take
+	// Used in take & drop actions - Searches ArrayList<Item> to see if it contains the item the user wants to take or drop
 	private static boolean search(String item) {
 		for (int i = 0; i < World.items.size(); i++) {
 			if (item.equalsIgnoreCase(World.items.get(i).getName())) {
@@ -96,7 +104,7 @@ public class GameEngine {
 		return false;
 	}
 	
-	// Used in take action - Gets the index of the item the user wants to take in ArrayList<Item>
+	// Used in take & drop actions - Gets the index of the item the user wants to take or drop in ArrayList<Item>
 	private static int getIndex(String item) {
 		for (int i = 0; i < World.items.size(); i++) {
 			if (item.equalsIgnoreCase(World.items.get(i).getName())) {
@@ -116,6 +124,7 @@ public class GameEngine {
 				+ "E - move east \n"
 				+ "W - move west \n"
 				+ "T [ITEM_NAME] - take item \n"
+				+ "D [ITEM_NAME] - drop item \n"
 				+ "M - view map \n"
 				+ "I - view inventory \n"
 				+ "H - display these help instructions \n"

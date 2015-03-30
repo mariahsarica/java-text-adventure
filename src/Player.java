@@ -35,9 +35,8 @@ public class Player {
 			if (World.items.get(0).getTaken() == true) {
 				if (item.getTaken() == false) {
 					if (currentLoc == item.locId) {
-						System.out.println(item.getDescrip());
-						item.setTaken(true);
 						addToInv(item);
+						System.out.println(item.getDescrip());
 					} else {
 						System.out.println("Not in this room!");
 					}
@@ -52,9 +51,30 @@ public class Player {
 		}
 	}
 	
-	// Adds item to inventory
+	// Adds item to inventory and sets it as taken
 	public static void addToInv(Item item) {
 		inventory.add(item);
+		item.setTaken(true);
+	}
+	
+	// Removes item from inventory and sets it as not taken
+	public static void removeFromInv(Item item) {
+		inventory.remove(item);
+		item.setTaken(false);
+	}
+	
+	
+	public static void drop(Item item) {
+		if (item.getTakable() == true) {
+			if (item.getTaken() == true) {
+				removeFromInv(item);
+				System.out.println("You have dropped the " + item.getName().toLowerCase() + ".");
+			} else {
+				System.out.println("You don't have this item.");
+			}
+		} else {
+			System.out.println("Invalid action.");
+		}
 	}
 	
 	
