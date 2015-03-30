@@ -41,10 +41,12 @@ public class GameEngine {
 		System.out.println("GAME OVER.\nCopyright 2015. Mariah Molenaer.");
 	}
 	
+	private static Item item; 
 	// Gets command from user
 	private static void getCommand() {
 		input = new Scanner(System.in);
-		command = input.nextLine();
+		command = input.next();
+		item = input.next();
 		command = command.toLowerCase();
 	}
 	
@@ -59,16 +61,16 @@ public class GameEngine {
 			Player.move(2);
 		} else if (command.equals("w")) {
 			Player.move(3);
-		} else if (command.equals("t cart")) {
-			Player.takeCart(World.items.get(0));
-		} else if (command.equals("t flyer")) {
-			Player.takeItem(World.items.get(1));
-		} else if (command.equals("t map")) {
-			Player.takeItem(World.items.get(2));
-		} else if (command.equals("t quinoa")) {
-			Player.takeItem(World.items.get(4));
-		} else if (command.equals("t celery")) {
-			Player.takeItem(World.items.get(5));
+//		} else if (command.equals("t cart")) {
+	//		Player.takeCart(World.items.get(0));
+//		} else if (command.equals("t flyer")) {
+	//		Player.takeItem(World.items.get(1));
+	//	} else if (command.equals("t map")) {
+//			Player.takeItem(World.items.get(2));
+//		} else if (command.equals("t quinoa")) {
+//			Player.takeItem(World.items.get(4));
+//		} else if (command.equals("t celery")) {
+//			Player.takeItem(World.items.get(5));
 		} else if (command.equals("i")) {
 			Player.checkInv();
 		} else if (command.equals("m")) {
@@ -77,8 +79,20 @@ public class GameEngine {
 			help();
 		} else if (command.equals("q")) {
 			quit();
-		} else {
-			System.out.println("Invalid command.");
+	//	} else {
+	//		System.out.println("Invalid command.");
+		} else if (command.equals("t")) {
+			if (item.equals("cart")) {
+				Player.takeCart(World.items.get(0));
+			} else if (World.items.contains(item)) {
+				int index = World.items.indexOf(item);
+				Player.takeItem(World.items.get(index));
+			} else {
+				System.out.println("Invalid command.");
+			}
+				
+				
+			
 		}
 	
 	}

@@ -9,6 +9,7 @@ public class Item {
 	private int id;              // Id of item (corresponds to index in ArrayList
 	private String name;         // Name of item
 	private String description;  // Description of item
+//	private Boolean takable;     // Determines whether this item is capable of being added to the cart (people may not be added to cart but are still part of item class)
 	private Boolean taken;       // Specifies whether the item has been taken
 	public int locId;            // Location Id of item (correspond to index of Locations array
 	
@@ -16,6 +17,7 @@ public class Item {
 	public Item(int id, String name) {
 		this.id = id;
 		this.name = name;
+	//	this.takable = takable;
 		this.taken = false;
 	}
 	 
