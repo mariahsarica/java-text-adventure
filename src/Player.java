@@ -31,22 +31,25 @@ public class Player {
 	
 	// Takes item and adds to inventory
 	public static void takeItem(Item item) {
-		if (World.items.get(0).getTaken() == true) {
-			if (item.getTaken() == false) {
-				if (currentLoc == item.locId) {
-					System.out.println(item.getDescrip());
-					item.setTaken(true);
-					addToInv(item);
+		if (item.getTakable() == true) {
+			if (World.items.get(0).getTaken() == true) {
+				if (item.getTaken() == false) {
+					if (currentLoc == item.locId) {
+						System.out.println(item.getDescrip());
+						item.setTaken(true);
+						addToInv(item);
+					} else {
+						System.out.println("Not in this room!");
+					}
 				} else {
-					System.out.println("Not in this room!");
+					System.out.println("Check your cart, you already have this item!");
 				}
 			} else {
-				System.out.println("Check your cart, you already have this item!");
+				System.out.println("You have nothing to put your groceries in!");
 			}
 		} else {
-			System.out.println("You have nothing to put your groceries in!");
+			System.out.println("Invalid action.");
 		}
-		
 	}
 	
 	// Adds item to inventory
@@ -57,14 +60,18 @@ public class Player {
 	
 	// Allows player to check inventory
 	public static void checkInv() {
-		if (inventory.size() > 0) {
-			System.out.println("Your cart currently has: ");
-		    for (int i = 0; i < inventory.size(); i++) {
-		    	System.out.println(inventory.get(i).getName());
-		    }
+		if (World.items.get(0).getTaken() == true) {
+			if (inventory.size() > 0) {
+				System.out.println("Your cart currently has: ");
+				for (int i = 0; i < inventory.size(); i++) {
+					System.out.println(inventory.get(i).getName());
+				}
+			} else {
+				System.out.println("You haven't added any items to your cart yet!");
+			}	
 		} else {
-			System.out.println("You haven't added any items to your cart yet!");
-		}		
+			System.out.println("You don't have anything!");
+		}
 	}
 	
 	// Allows player to move to different locations

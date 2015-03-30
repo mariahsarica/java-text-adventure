@@ -9,15 +9,15 @@ public class Item {
 	private int id;              // Id of item (corresponds to index in ArrayList
 	private String name;         // Name of item
 	private String description;  // Description of item
-//	private Boolean takable;     // Determines whether this item is capable of being added to the cart (people may not be added to cart but are still part of item class)
-	private Boolean taken;       // Specifies whether the item has been taken
+	private boolean takable;     // Determines whether this item is capable of being added to the cart (people may not be added to cart but are still part of item class)
+	private boolean taken;       // Specifies whether the item has been taken
 	public int locId;            // Location Id of item (correspond to index of Locations array
 	
 	// Constructor
-	public Item(int id, String name) {
+	public Item(int id, String name, boolean takable) {
 		this.id = id;
 		this.name = name;
-	//	this.takable = takable;
+		this.takable = takable;
 		this.taken = false;
 	}
 	 
@@ -37,10 +37,14 @@ public class Item {
 		this.description = descrip;
 	}
 	
-	public Boolean getTaken() {
+	public boolean getTakable() {
+		return this.takable;
+	}
+	
+	public boolean getTaken() {
 		return this.taken;
 	}
-	public void setTaken(Boolean taken) {
+	public void setTaken(boolean taken) {
 		this.taken = taken;
 	}
 	

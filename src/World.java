@@ -16,13 +16,13 @@ public class World {
 		
 		// ITEMS
 		// Cart
-		Item cart = new Item(0, "CART");
+		Item cart = new Item(0, "CART", true);
 		cart.setDescrip("You now have something to put your groceries in.");
 		cart.setLocId(0);
 		items.add(cart);
 		
 		// Flyer
-		Item flyer = new Item(1, "FLYER");
+		Item flyer = new Item(1, "FLYER", true);
 		flyer.setDescrip("You skim the flyer... Weekly Specials: 'gross' ... 'eww' \n"
 				+ "oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic \n"
 				+ "CELERY for 75¢!!! Don't miss out on these KILLER deals!!!");
@@ -30,31 +30,31 @@ public class World {
 		items.add(flyer);
 		
 		// Map
-		Item map = new Item(2, "MAP");
+		Item map = new Item(2, "MAP", true);
 		map.setDescrip("You have picked up a map of the store! Key in 'm' to view it.");
 		map.setLocId(0);
 		items.add(map);
 		
 		// Cashier
-		Item cashier = new Item(3, "CASHIER");
+		Item cashier = new Item(3, "CASHIER", false);
 		cashier.setDescrip("Oooooo, a dirty look, ouch!");
 		cashier.setLocId(1);
 		items.add(cashier);
 		
 		// Quinoa
-		Item quinoa = new Item(4, "QUINOA");;
+		Item quinoa = new Item(4, "QUINOA", true);;
 		quinoa.setDescrip("Sweet! I can't wait to make some quinoa salad later!!");
 		quinoa.setLocId(3);
 		items.add(quinoa);
 		
 		// Celery
-		Item celery = new Item(5, "CELERY");
+		Item celery = new Item(5, "CELERY", true);
 		celery.setDescrip("I can't believe this celery is only 75¢!!");
 		celery.setLocId(2);
 		items.add(celery);
 		
 		// Crazy Guy
-		Item crazyGuy = new Item(6, "CRAZY GUY");
+		Item crazyGuy = new Item(6, "CRAZY GUY", false);
 		crazyGuy.setDescrip("Crazy Guy: DON'T GO TO THE DELI");
 		crazyGuy.setLocId(4);
 		items.add(crazyGuy);
@@ -133,7 +133,8 @@ public class World {
 	
 	// Map of the world
 	public static void map() {
-		System.out.println(
+		if (items.get(2).getTaken() == true) {
+			System.out.println(
 				"---------------------------%%%%%%%%%%%%%---------------------------\n"+
                 "---------------------------%%%  MAP  %%%---------------------------\n"+
                 "---------------------------%%%%%%%%%%%%%---------------------------\n"+
@@ -162,6 +163,9 @@ public class World {
                 "---------------------------*************-------*************-------\n"+
                 "-------------------------------------------------------------------\n"+
                 "-------------------------------------------------------------------\n");
+		} else {
+			System.out.println("You don't have a map.");
+		}
 	}
 
 }

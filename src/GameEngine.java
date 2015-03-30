@@ -9,8 +9,7 @@ public class GameEngine {
 	
 	private static boolean stillPlaying = true; // For game loop
 	private static Scanner input;				// Gets user input
-	private static String command;              // Used for first token of user input in getCommand method & converts to String
-	private static String item;					// Used for second token of user input in getCommand method & converts to String
+	private static String command;              // Converts input to String
 
 	
 	public static void main(String[] args) {
@@ -47,10 +46,8 @@ public class GameEngine {
 	// Gets command from user
 	private static void getCommand() {
 		input = new Scanner(System.in);
-		command = input.next();          // First input token
-		item = input.next();             // Second input token
+		command = input.next();       
 		command = command.toLowerCase();
-		item = item.toLowerCase();
 	}
 	
 	// Reads user command and performs proper action
@@ -73,6 +70,7 @@ public class GameEngine {
 		} else if (command.equals("q")) {
 			quit();
 		} else if (command.equals("t")) {
+			String item = input.next();
 			if (item.equals("cart")) {
 				Player.takeCart(World.items.get(0));
 			} else if (search(item)) {
