@@ -8,8 +8,10 @@ import java.util.Scanner;
 public class GameEngine {	
 	
 	private static boolean stillPlaying = true; // For game loop
-	private static String command;              // Converts user input to String
 	private static Scanner input;				// Gets user input
+	private static String command;              // Used for first token of user input in getCommand method & converts to String
+	private static String item;					// Used for second token of user input in getCommand method & converts to String
+
 	
 	public static void main(String[] args) {
 		
@@ -41,13 +43,14 @@ public class GameEngine {
 		System.out.println("GAME OVER.\nCopyright 2015. Mariah Molenaer.");
 	}
 	
-	private static Item item; 
+	
 	// Gets command from user
 	private static void getCommand() {
 		input = new Scanner(System.in);
-		command = input.next();
-		item = input.next();
+		command = input.next();          // First input token
+		item = input.next();             // Second input token
 		command = command.toLowerCase();
+		item = item.toLowerCase();
 	}
 	
 	// Reads user command and performs proper action
@@ -61,16 +64,6 @@ public class GameEngine {
 			Player.move(2);
 		} else if (command.equals("w")) {
 			Player.move(3);
-//		} else if (command.equals("t cart")) {
-	//		Player.takeCart(World.items.get(0));
-//		} else if (command.equals("t flyer")) {
-	//		Player.takeItem(World.items.get(1));
-	//	} else if (command.equals("t map")) {
-//			Player.takeItem(World.items.get(2));
-//		} else if (command.equals("t quinoa")) {
-//			Player.takeItem(World.items.get(4));
-//		} else if (command.equals("t celery")) {
-//			Player.takeItem(World.items.get(5));
 		} else if (command.equals("i")) {
 			Player.checkInv();
 		} else if (command.equals("m")) {
@@ -79,22 +72,40 @@ public class GameEngine {
 			help();
 		} else if (command.equals("q")) {
 			quit();
-	//	} else {
-	//		System.out.println("Invalid command.");
 		} else if (command.equals("t")) {
 			if (item.equals("cart")) {
 				Player.takeCart(World.items.get(0));
-			} else if (World.items.contains(item)) {
-				int index = World.items.indexOf(item);
+			} else if (search(item)) {
+				int index = getIndex(item);
 				Player.takeItem(World.items.get(index));
 			} else {
 				System.out.println("Invalid command.");
 			}
-				
-				
-			
+		} else {
+			System.out.println("Invalid command.");
 		}
 	
+	
+	}
+	
+	// Used in take action - Searches ArrayList<Item> to see if it contains the item the user wants to take
+	private static boolean search(String item) {
+		for (int i = 0; i < World.items.size(); i++) {
+			if (item.equalsIgnoreCase(World.items.get(i).getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// Used in take action - Gets the index of the item the user wants to take in ArrayList<Item>
+	private static int getIndex(String item) {
+		for (int i = 0; i < World.items.size(); i++) {
+			if (item.equalsIgnoreCase(World.items.get(i).getName())) {
+				return i;
+			}
+		}
+		return -1;	
 	}
 	
 	// Displays list of commands available to user
