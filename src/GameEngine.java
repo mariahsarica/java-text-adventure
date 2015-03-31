@@ -79,6 +79,7 @@ public class GameEngine {
 			} else {
 				System.out.println("Invalid command.");
 			}
+			
 		} else if (command.equals("d")) {
 			String item = input.next();
 			if (search(item)) {
@@ -87,27 +88,23 @@ public class GameEngine {
 			} else {
 				System.out.println("Invalid command.");
 			}
-		
+			
 		} else if (command.equals("b")) {
-			if (input.hasNextInt()) {
-				int steps = input.nextInt();
-				if (steps == 0) {
-					Player.backtrack(1);
-				} else if (steps < 0) {
-					System.out.println("Please enter a positive number of steps to backtrack.");
-				} else if (steps > BreadCrumbTrail.stepsFromBeg) {
-					System.out.println("You cannot backtrack more steps than you've taken! Refer to the value listed next to \n"
-							+ "\"Steps from Beginning\" for the maximum number of steps you may backtrack.");
-				} else {
-					Player.backtrack(steps);
-				}
+			String steps = input.nextLine();
+			if (steps.equals("")) {
+				Player.backtrack(1);
 			} else {
-				System.out.println("Invaild command.");
+				try {
+					steps = steps.replaceAll("\\s", "");
+					Integer s = new Integer(steps);
+					Player.backtrack(s);
+				} catch (NumberFormatException nfe){
+					System.out.println("Invalid command.");
+				}
 			}
 		} else {
 			System.out.println("Invalid command.");
 		}
-	
 	
 	}
 	

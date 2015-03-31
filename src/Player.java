@@ -9,7 +9,7 @@ public class Player {
 
 	public static int currentLoc;
 	public static ArrayList<Item> inventory = new ArrayList<Item>();
-	public static int totalMoves = 0;                                      // Keeps track of total number of moves player has made throughout the game
+	public static int totalMoves = 0;                                 // Keeps track of total number of moves player has made throughout the game
 	
 	public Player() {
 	}
@@ -97,6 +97,11 @@ public class Player {
 	public static void backtrack(int steps) {
 		if (BreadCrumbTrail.stepsFromBeg == 0) {
 			System.out.println("You are already at the beginning of your experience in NATURE'S PANTRY!");
+		} else if (steps > BreadCrumbTrail.stepsFromBeg) {
+			System.out.println("You cannot backtrack more steps than you've taken! Refer to the value listed next to \n"
+					+ "\"Steps from Beginning\" for the maximum number of steps you may backtrack.");
+		} else if (steps <= 0) {
+			System.out.println("Enter a positive number of steps to backtrack.");
 		} else {
 			BreadCrumbTrail.remove(steps);
 			if (BreadCrumbTrail.last == null) {
