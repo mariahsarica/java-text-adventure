@@ -87,6 +87,23 @@ public class GameEngine {
 			} else {
 				System.out.println("Invalid command.");
 			}
+		
+		} else if (command.equals("b")) {
+			if (input.hasNextInt()) {
+				int steps = input.nextInt();
+				if (steps == 0) {
+					Player.backtrack(1);
+				} else if (steps < 0) {
+					System.out.println("Please enter a positive number of steps to backtrack.");
+				} else if (steps > BreadCrumbTrail.stepsFromBeg) {
+					System.out.println("You cannot backtrack more steps than you've taken! Refer to the value listed next to \n"
+							+ "\"Steps from Beginning\" for the maximum number of steps you may backtrack.");
+				} else {
+					Player.backtrack(steps);
+				}
+			} else {
+				System.out.println("Invaild command.");
+			}
 		} else {
 			System.out.println("Invalid command.");
 		}
@@ -125,6 +142,7 @@ public class GameEngine {
 				+ "W - move west \n"
 				+ "T [ITEM_NAME] - take item \n"
 				+ "D [ITEM_NAME] - drop item \n"
+				+ "B [NUMBER_OF_STEPS] - backtrack a specified number of steps \n"
 				+ "M - view map \n"
 				+ "I - view inventory \n"
 				+ "H - display these help instructions \n"

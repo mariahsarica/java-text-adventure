@@ -9,7 +9,7 @@ public class Player {
 
 	public static int currentLoc;
 	public static ArrayList<Item> inventory = new ArrayList<Item>();
-	public static int moves = 0;                                      // Keeps track of number of moves player has made
+	public static int totalMoves = 0;                                      // Keeps track of total number of moves player has made throughout the game
 	
 	public Player() {
 	}
@@ -94,6 +94,22 @@ public class Player {
 		}
 	}
 	
+	public static void backtrack(int steps) {
+		if (BreadCrumbTrail.stepsFromBeg == 0) {
+			System.out.println("You are already at the beginning of your experience in NATURE'S PANTRY!");
+		} else {
+			BreadCrumbTrail.remove(steps);
+			if (BreadCrumbTrail.last == null) {
+				currentLoc = 0;
+			} else {
+				currentLoc = BreadCrumbTrail.last.value;
+			}
+			totalMoves = totalMoves + 1; 
+			System.out.println(World.locs.get(currentLoc).getText());
+		}
+	}
+	
+	
 	// Allows player to move to different locations
 	public static void move(int dir) {
 		int newLoc = World.nav[currentLoc][dir];
@@ -101,7 +117,8 @@ public class Player {
 			System.out.println("You cannot go that way.");
 		} else {
 			currentLoc = newLoc;
-			moves = moves + 1;
+			totalMoves = totalMoves + 1;
+			BreadCrumbTrail.add(currentLoc);
 		}
 	   
 	    System.out.println(World.locs.get(currentLoc).getText());    
