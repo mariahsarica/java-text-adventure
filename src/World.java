@@ -7,14 +7,21 @@ import java.util.ArrayList;
 
 public class World {
 	
-	public static ArrayList<Location> locs = new ArrayList<Location>();
-	public static ArrayList<Item> items = new ArrayList<Item>();
-	public static int[][] nav;
+	public static ArrayList<Location> locs = new ArrayList<Location>();  // ArrayList of type Locations that stores locations
+	public static ArrayList<Item> items = new ArrayList<Item>();         // ArrayList of type Item that stores items
+	public static int[][] nav;											 // Two-dimensional array to hold the navigation matrix
 
-	// Set up instances of Location & Item classes and create navigation matrix
+	
+	/**
+	 * The init method sets up instances of the Location and Item classes,
+	 * adds them to their appropriate ArrayLists, and creates the navigation
+	 * matrix.
+	 */
 	public static void init() {
 		
-		// ITEMS
+		/**
+		 * ITEMS
+		 */
 		// Cart
 		Item cart = new Item(0, "CART", true);
 		cart.setDescrip("You now have something to put your groceries in.");
@@ -60,8 +67,9 @@ public class World {
 		items.add(crazyGuy);
 		
 		
-		
-		// LOCATIONS
+		/**
+		 * LOCATIONS
+		 */
 		// Lobby
 		Location lobby = new Location(0, "Lobby");
 		lobby.setDescrip("You are in the lobby. There is a row of shopping CARTS to your right \n"
@@ -116,6 +124,9 @@ public class World {
 		aisle2.setDir("North-Dairy, East-Aisle 3");
 		locs.add(aisle2);
 	
+		/**
+		 * Navigation Matrix
+		 */
 		nav = new int[][] {
 			/* N   S   E   W */
 			/* 0   1   2   3 */
@@ -131,7 +142,9 @@ public class World {
 		
 	}
 	
-	// Map of the world
+	/**
+	 * The map method prints out a map of NATURE'S PANTRY (only if the user has picked it up).
+	 */
 	public static void map() {
 		if (items.get(2).getTaken() == true) {
 			System.out.println(

@@ -1,5 +1,5 @@
 /**
- * GameEngine.java - NATURE'S PANTRY Game Engine
+ * GameEngine.java - NATURE'S PANTRY - A text adventure game
  * @author Mariah Molenaer
  */
 
@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 public class GameEngine {	
 	
-	private static boolean stillPlaying = true; // For game loop
-	private static Scanner input;				// Gets user input
-	private static String command;              // Converts input to String
+	private static boolean stillPlaying = true;  // For game loop
+	private static Scanner input;				 // Gets user input
+	private static String command;               // Converts input to String
 
 	
 	public static void main(String[] args) {
@@ -26,7 +26,11 @@ public class GameEngine {
 	
 	}
 	
-	// Welcome message & starts player in lobby
+	
+	/**
+	 * The welcomeMsg method prints out a welcome message to the user and 
+	 * starts the player in the lobby
+	 */
 	private static void welcomeMsg() {
 		System.out.println("Welcome to NATURE’S PANTRY, your favorite \n"
 				+ "alternative grocery store! \n"
@@ -36,40 +40,48 @@ public class GameEngine {
 				+ World.locs.get(Player.currentLoc).getText());
 	}
 	
-	// Quits game
+	
+	/**
+	 * The quit method quits the game and prints out credits to the user.
+	 */
 	private static void quit() {
 		stillPlaying = false;
 		System.out.println("GAME OVER.\nCopyright 2015. Mariah Molenaer.");
 	}
 	
 	
-	// Gets command from user
+	/**
+	 * The getCommand method gets the command from the users input.
+	 */
 	private static void getCommand() {
 		input = new Scanner(System.in);
 		command = input.next();       
 		command = command.toLowerCase();
 	}
 	
-	// Reads user command and performs proper action
+	
+	/**
+	 * The commandReader method reads the users command and performs the proper action.
+	 */
 	private static void commandReader() {
 		
-		       if (command.equals("n")) {
+		       if (command.equals("n")) {    				// Moves north
 			Player.move(0);
-		} else if (command.equals("s")) {
+		} else if (command.equals("s")) {    			    // Moves south
 			Player.move(1);
-		} else if (command.equals("e")) {
+		} else if (command.equals("e")) {    				// Moves east
 			Player.move(2);
-		} else if (command.equals("w")) {
+		} else if (command.equals("w")) {    				// Moves west
 			Player.move(3);
-		} else if (command.equals("i")) {
+		} else if (command.equals("i")) {    				// Checks inventory
 			Player.checkInv();
-		} else if (command.equals("m")) {
+		} else if (command.equals("m")) {    				// Displays map
 			World.map();
-		} else if (command.equals("h")) {
+		} else if (command.equals("h")) {    				// Displays help menu
 			help();
-		} else if (command.equals("q")) {
+		} else if (command.equals("q")) {    				// Quits game
 			quit();
-		} else if (command.equals("t")) {
+		} else if (command.equals("t")) {    				// Takes item
 			String item = input.next();
 			if (item.equals("cart")) {
 				Player.takeCart(World.items.get(0));
@@ -80,7 +92,7 @@ public class GameEngine {
 				System.out.println("Invalid command.");
 			}
 			
-		} else if (command.equals("d")) {
+		} else if (command.equals("d")) {					// Drops item
 			String item = input.next();
 			if (search(item)) {
 				int index = getIndex(item);
@@ -89,7 +101,7 @@ public class GameEngine {
 				System.out.println("Invalid command.");
 			}
 			
-		} else if (command.equals("b")) {
+		} else if (command.equals("b")) {					// Backtracks
 			String steps = input.nextLine();
 			if (steps.equals("")) {
 				Player.backtrack(1);
@@ -108,7 +120,14 @@ public class GameEngine {
 	
 	}
 	
-	// Used in take & drop actions - Searches ArrayList<Item> to see if it contains the item the user wants to take or drop
+	
+	/**
+	 * The search method is used in the take and drop actions. It searches the ArrayList of items
+	 * to see if it contains the item the user wants to take/drop.
+	 * @param item Name of item user wants to take/drop
+	 * @return true if the item is in the ArrayList
+	 * 		   false if it is not
+	 */
 	private static boolean search(String item) {
 		for (int i = 0; i < World.items.size(); i++) {
 			if (item.equalsIgnoreCase(World.items.get(i).getName())) {
@@ -118,7 +137,14 @@ public class GameEngine {
 		return false;
 	}
 	
-	// Used in take & drop actions - Gets the index of the item the user wants to take or drop in ArrayList<Item>
+	
+	/**
+	 * The getIndex method is used in the take and drop actions. It gets the index of the item in the
+	 * ArrayList of items that the user wants to take/drop.
+	 * @param item Name of item user wants to take/drop
+	 * @return Index i of item in ArrayList or
+	 *         -1 if it is not present
+	 */
 	private static int getIndex(String item) {
 		for (int i = 0; i < World.items.size(); i++) {
 			if (item.equalsIgnoreCase(World.items.get(i).getName())) {
@@ -128,7 +154,10 @@ public class GameEngine {
 		return -1;	
 	}
 	
-	// Displays list of commands available to user
+	
+	/**
+	 * The help method displays a list of commands available to the user.
+	 */
 	private static void help() {
 		System.out.println("Items available for interaction in each room are \n"
 				+ "listed in CAPTIAL letters. The following commands \n"
@@ -146,6 +175,4 @@ public class GameEngine {
 				+ "Q - quit game");
 	}
 	
-	
-
 }

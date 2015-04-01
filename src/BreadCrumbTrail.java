@@ -1,3 +1,7 @@
+/**
+ * BreadCrumbTrail.java - BreadCrumbTrail
+ * @author Mariah Molenaer
+ */
 
 public class BreadCrumbTrail {
 
@@ -15,10 +19,11 @@ public class BreadCrumbTrail {
 		BreadCrumb(int val) {
 			this(val, null);
 		}
+		
 	}
 	
 	
-	private static BreadCrumb first;
+	static BreadCrumb first;
 	static BreadCrumb last;
 	public static int stepsFromBeg = 0;
 	
@@ -44,7 +49,7 @@ public class BreadCrumbTrail {
 	/** 
 	 * The add method adds a bread crumb to the 
 	 * end of the bread crumb trail.
-	 * @param currentLoc
+	 * @param currentLoc The index of the current location (each bread crumb is a location)
 	 */
 	public static void add(int currentLoc) {
 		if (isEmpty()) {
@@ -86,6 +91,5 @@ public class BreadCrumbTrail {
 		}
 	}
 	
-	
-	
+
 }
