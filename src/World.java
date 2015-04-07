@@ -7,22 +7,29 @@ import java.util.ArrayList;
 
 public class World {
 	
-	public static ArrayList<Location> locs = new ArrayList<Location>();
-	public static ArrayList<Item> items = new ArrayList<Item>();
-	public static int[][] nav;
+	public static ArrayList<Location> locs = new ArrayList<Location>();  // ArrayList of type Locations that stores locations
+	public static ArrayList<Item> items = new ArrayList<Item>();         // ArrayList of type Item that stores items
+	public static int[][] nav;											 // Two-dimensional array to hold the navigation matrix
 
-	// Set up instances of Location & Item classes and create navigation matrix
+	
+	/**
+	 * The init method sets up instances of the Location and Item classes,
+	 * adds them to their appropriate ArrayLists, and creates the navigation
+	 * matrix.
+	 */
 	public static void init() {
 		
-		// ITEMS
+		/**
+		 * ITEMS
+		 */
 		// Cart
-		Item cart = new Item(0, "CART");
+		Item cart = new Item(0, "CART", true);
 		cart.setDescrip("You now have something to put your groceries in.");
 		cart.setLocId(0);
 		items.add(cart);
 		
 		// Flyer
-		Item flyer = new Item(1, "FLYER");
+		Item flyer = new Item(1, "FLYER", true);
 		flyer.setDescrip("You skim the flyer... Weekly Specials: 'gross' ... 'eww' \n"
 				+ "oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic \n"
 				+ "CELERY for 75¢!!! Don't miss out on these KILLER deals!!!");
@@ -30,38 +37,39 @@ public class World {
 		items.add(flyer);
 		
 		// Map
-		Item map = new Item(2, "MAP");
+		Item map = new Item(2, "MAP", true);
 		map.setDescrip("You have picked up a map of the store! Key in 'm' to view it.");
 		map.setLocId(0);
 		items.add(map);
 		
 		// Cashier
-		Item cashier = new Item(3, "CASHIER");
+		Item cashier = new Item(3, "CASHIER", false);
 		cashier.setDescrip("Oooooo, a dirty look, ouch!");
 		cashier.setLocId(1);
 		items.add(cashier);
 		
 		// Quinoa
-		Item quinoa = new Item(4, "QUINOA");;
+		Item quinoa = new Item(4, "QUINOA", true);;
 		quinoa.setDescrip("Sweet! I can't wait to make some quinoa salad later!!");
 		quinoa.setLocId(3);
 		items.add(quinoa);
 		
 		// Celery
-		Item celery = new Item(5, "CELERY");
+		Item celery = new Item(5, "CELERY", true);
 		celery.setDescrip("I can't believe this celery is only 75¢!!");
 		celery.setLocId(2);
 		items.add(celery);
 		
 		// Crazy Guy
-		Item crazyGuy = new Item(6, "CRAZY GUY");
+		Item crazyGuy = new Item(6, "CRAZY GUY", false);
 		crazyGuy.setDescrip("Crazy Guy: DON'T GO TO THE DELI");
 		crazyGuy.setLocId(4);
 		items.add(crazyGuy);
 		
 		
-		
-		// LOCATIONS
+		/**
+		 * LOCATIONS
+		 */
 		// Lobby
 		Location lobby = new Location(0, "Lobby");
 		lobby.setDescrip("You are in the lobby. There is a row of shopping CARTS to your right \n"
@@ -116,6 +124,9 @@ public class World {
 		aisle2.setDir("North-Dairy, East-Aisle 3");
 		locs.add(aisle2);
 	
+		/**
+		 * Navigation Matrix
+		 */
 		nav = new int[][] {
 			/* N   S   E   W */
 			/* 0   1   2   3 */
@@ -131,9 +142,12 @@ public class World {
 		
 	}
 	
-	// Map of the world
+	/**
+	 * The map method prints out a map of NATURE'S PANTRY (only if the user has picked it up).
+	 */
 	public static void map() {
-		System.out.println(
+		if (items.get(2).getTaken() == true) {
+			System.out.println(
 				"---------------------------%%%%%%%%%%%%%---------------------------\n"+
                 "---------------------------%%%  MAP  %%%---------------------------\n"+
                 "---------------------------%%%%%%%%%%%%%---------------------------\n"+
@@ -162,6 +176,9 @@ public class World {
                 "---------------------------*************-------*************-------\n"+
                 "-------------------------------------------------------------------\n"+
                 "-------------------------------------------------------------------\n");
+		} else {
+			System.out.println("You don't have a map.");
+		}
 	}
 
 }

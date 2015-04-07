@@ -6,12 +6,16 @@
 
 public class Location {
 
-	private int id;				// Unique id value for location
-	private String name;		// Name of location
-	private String description; // Description of location
-	private String directions;  // Movable directions avail from current location
+	private int id;				  // Unique id value for location (corresponds with index in locs ArrayList)
+	private String name;		  // Name of location
+	private String description;   // Description of location
+	private String directions;    // Movable directions avail from current location
 	
-	// Constructor
+	/**
+	 * Constructor
+	 * @param id Id of location
+	 * @param name Name of location
+	 */
 	public Location(int id, String name) {
 		this.id = id;
 		this.name = name;
@@ -41,7 +45,8 @@ public class Location {
 	}
 	
 	public String getText() {
-		return this.description + "\n" + this.getDir();
+		return this.description + "\n" + this.getDir() + "\nTotal Moves: " + Player.totalMoves 
+				+ "\nSteps from Beginning: " + BreadCrumbTrail.stepsFromBeg;
 	}
 
 }
