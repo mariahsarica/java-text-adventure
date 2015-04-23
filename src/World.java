@@ -30,8 +30,8 @@ public class World {
 		
 		// Flyer
 		Item flyer = new Item(1, "FLYER", true);
-		flyer.setDescrip("You skim the flyer... Weekly Specials: 'gross' ... 'eww' \n"
-				+ "oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic \n"
+		flyer.setDescrip("You skim the flyer... Weekly Specials: 'gross' ... 'eww' "
+				+ "oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic "
 				+ "CELERY for 75¢!!! Don't miss out on these KILLER deals!!!");
 		flyer.setLocId(0);
 		items.add(flyer);
@@ -72,7 +72,7 @@ public class World {
 		 */
 		// Lobby
 		Location lobby = new Location(0, "Lobby");
-		lobby.setDescrip("You are in the lobby. There is a row of shopping CARTS to your right \n"
+		lobby.setDescrip("You are in the lobby. There is a row of shopping CARTS to your right "
 				+ "and a stand of FLYERS and MAPS to your left.");
 		lobby.setDir("North-Produce, West-Cash Registers");
 		locs.add(lobby);
@@ -85,14 +85,14 @@ public class World {
 		
 		// Produce
 		Location produce = new Location(2, "Produce");
-		produce.setDescrip("You are in the produce section. Ahh there is that really \n"
+		produce.setDescrip("You are in the produce section. Ahh there is that really "
 				+ "cheap organic CELERY!");
 		produce.setDir("North-Bulk, West-Aisle 3, South-Lobby");
 		locs.add(produce);
 		
 		// Bulk
 		Location bulk = new Location(3, "Bulk");
-		bulk.setDescrip("You are in the bulk section. Oooo so many options, I really \n"
+		bulk.setDescrip("You are in the bulk section. Oooo so many options, I really "
 				+ "only came in for almond milk and tofu.... but the QUINOA is such a great deal!");
 		bulk.setDir("South-Produce");
 		locs.add(bulk);
@@ -105,21 +105,21 @@ public class World {
 		
 		// Deli
 		Location deli = new Location(5, "Deli");
-		deli.setDescrip("You are in the deli section. No one seems to be around. There is a \n"
-				+ "sign that reads, 'RING BELL for service'.");
+		deli.setDescrip("You are in the deli section. No one seems to be around. There is a "
+				+ "sign that reads, 'RING BELL for service'.\n\n");
 		deli.setDir("West-Dairy, South-Aisle 3");
 		locs.add(deli);
 		
 		// Dairy
 		Location dairy = new Location(6, "Dairy");
-		dairy.setDescrip("You are in the dairy section. There is the ALMOND MILK and TOFU /n"
+		dairy.setDescrip("You are in the dairy section. There is the ALMOND MILK and TOFU "
 				+ "I came in for!");
 		dairy.setDir("East-Deli, South-Aisle 2");
 		locs.add(dairy);
 		
 		// Aisle 2
 		Location aisle2 = new Location(7, "Aisle 2");
-		aisle2.setDescrip("You are in Aisle 2. Ahhh gluten free FLOUR! Might /n"
+		aisle2.setDescrip("You are in Aisle 2. Ahhh gluten free FLOUR! Might "
 				+ "as well get it while I'm here.");
 		aisle2.setDir("North-Dairy, East-Aisle 3");
 		locs.add(aisle2);
@@ -147,7 +147,7 @@ public class World {
 	 */
 	public static void map() {
 		if (items.get(2).getTaken() == true) {
-			System.out.println(
+			GameEngine.informationMessage( 
 				"---------------------------%%%%%%%%%%%%%---------------------------\n"+
                 "---------------------------%%%  MAP  %%%---------------------------\n"+
                 "---------------------------%%%%%%%%%%%%%---------------------------\n"+
@@ -177,7 +177,7 @@ public class World {
                 "-------------------------------------------------------------------\n"+
                 "-------------------------------------------------------------------\n");
 		} else {
-			System.out.println("You don't have a map.");
+			GameEngine.informationMessage("You don't have a map.");
 		}
 	}
 
