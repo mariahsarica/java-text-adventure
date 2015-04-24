@@ -147,7 +147,7 @@ public class World {
 	}
 	
 	/**
-	 * The map method prints out a map of NATURE'S PANTRY (only if the user has picked it up).
+	 * The map method displays a map of NATURE'S PANTRY (only if the user has picked it up).
 	 */
 	public static void map() {
 		if (items.get(2).getTaken() == true) {

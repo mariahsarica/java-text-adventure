@@ -26,7 +26,6 @@ public class GameEngine {
 	private static JFrame frame;
 	private JTextField input;
 	public static JTextArea output;
-	
 	public static JTextArea inv;
 	
 	
@@ -280,7 +279,6 @@ public class GameEngine {
     		+ "D [ITEM_NAME] - drop item \n"
     		+ "B [NUMBER_OF_STEPS] - backtrack a specified number of steps \n"
     		+ "M - view map \n"
-    		+ "I - view inventory \n"
     		+ "H - display these help instructions \n"
     		+ "Q - quit game";
     	
