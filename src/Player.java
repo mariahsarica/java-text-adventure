@@ -25,6 +25,7 @@ public class Player {
 			if (currentLoc == 0) {
 				GameEngine.output.append(cart.getDescrip());
 				cart.setTaken(true);
+				GameEngine.inv.setText("Your cart currently has: \n\n");
 			} else {
 				GameEngine.informationMessage("Not in this room!");
 			}
@@ -67,6 +68,7 @@ public class Player {
 	public static void addToInv(Item item) {
 		inventory.add(item);
 		item.setTaken(true);
+		GameEngine.inv.append(item.getName() + "\n");
 	}
 	
 	
@@ -77,6 +79,8 @@ public class Player {
 	public static void removeFromInv(Item item) {
 		inventory.remove(item);
 		item.setTaken(false);
+		String i = GameEngine.inv.getText();
+		GameEngine.inv.setText(i.replace(item.getName() + "\n", ""));
 	}
 	
 	
@@ -94,26 +98,6 @@ public class Player {
 			}
 		} else {
 			GameEngine.errorMessage();
-		}
-	}
-	
-	
-	/**
-	 * The checkInv method prints out the player's current inventory.
-	 */
-	public static void checkInv() {
-		if (World.items.get(0).getTaken() == true) {
-			if (inventory.size() > 0) {
-				GameEngine.output.append("Your cart currently has: \n");
-				for (int i = 0; i < inventory.size(); i++) {
-					GameEngine.output.append(inventory.get(i).getName() + "\n");
-				}
-				GameEngine.output.append("\n");
-			} else {
-				GameEngine.informationMessage("You haven't added any items to your cart yet!");
-			}
-		} else {
-			GameEngine.informationMessage("You don't have anything!");
 		}
 	}
 	

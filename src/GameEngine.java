@@ -27,6 +27,8 @@ public class GameEngine {
 	private JTextField input;
 	public static JTextArea output;
 	
+	public static JTextArea inv;
+	
 	
 	/**
 	 * Constructor
@@ -44,7 +46,7 @@ public class GameEngine {
 		        eng.showGoodbye();
 		    }
 		});
-		frame.getContentPane().setPreferredSize(new Dimension(400, 300));
+		frame.getContentPane().setPreferredSize(new Dimension(500, 400));
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 	}
@@ -83,7 +85,7 @@ public class GameEngine {
         	command = rawInput[0].toLowerCase();
         	nextToken = rawInput[1].toLowerCase();
         } else {
-        	command = userInput;
+        	command = userInput.toLowerCase();
         	nextToken = null;
         }
         	
@@ -95,8 +97,6 @@ public class GameEngine {
     		Player.move(2);
     	} else if (command.equals("w")) {    				    // Moves west
     		Player.move(3);
-    	} else if (command.equals("i")) {    				    // Checks inventory
-    		Player.checkInv();
     	} else if (command.equals("m")) {    				    // Displays map
     		World.map();
     	} else if (command.equals("h")) {    				    // Displays help menu
@@ -228,11 +228,17 @@ public class GameEngine {
    		title.setHorizontalAlignment(JLabel.CENTER);
 
    		JPanel inputsPanel = this.buildInputControls();
+   		
+   		inv = new JTextArea("You need something to put your groceries in! \n\n", 10, 10);
+   		inv.setEditable(false);
+   		inv.setLineWrap(true);
+   		inv.setWrapStyleWord(true);
 
    		JPanel panel = new JPanel();
-   		panel.setLayout(new BorderLayout());
+   		panel.setLayout(new BorderLayout(20, 10));
    		panel.add(title, BorderLayout.PAGE_START);
    		panel.add(scroll, BorderLayout.CENTER);
+   		panel.add(inv, BorderLayout.LINE_END);
    		panel.add(inputsPanel, BorderLayout.PAGE_END);
    		return panel;
    	}
