@@ -122,6 +122,9 @@ public class GameEngine {
    			if (search(item)) {
    				int index = getIndex(item);
    				Player.drop(World.items.get(index));
+   				if (item.equals("cart")) {
+   					inv.setText("You need something to put your groceries in! \n\n");
+   				}
    			} else {
    				errorMessage();
    			}
