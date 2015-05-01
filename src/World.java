@@ -34,8 +34,8 @@ public class World {
 		
 		// Flyer
 		Item flyer = new Item(1, "FLYER", true);
-		flyer.setDescrip("You skim the flyer... Weekly Specials: 'gross' ... 'eww' "
-				+ "oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic "
+		flyer.setDescrip("You skim the flyer... \nWeekly Specials: 'gross' ... 'eww' ... "
+				+ "Oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic "
 				+ "CELERY for 75¢!!! Don't miss out on these KILLER deals!!!");
 		flyer.setLocId(0);
 		items.add(flyer);
@@ -70,6 +70,12 @@ public class World {
 		crazyGuy.setLocId(4);
 		items.add(crazyGuy);
 		
+		// Bell
+		Item bell = new Item(7, "BELL", false);
+		bell.setDescrip("Something crazy happens");
+		bell.setLocId(5);
+		items.add(bell);
+		
 		
 		/**
 		 * LOCATIONS
@@ -85,7 +91,7 @@ public class World {
 		// Cash Registers
 		Location registers = new Location(1, "Cash Registers");
 		registers.setLoc("You are by the cash registers.");
-		registers.setDescrip("You lock eyes with the CASHIER, quick, make a move.");
+		registers.setDescrip("You lock eyes with the CASHIER, quick, make a move. \nEnter \"smile\" to smile.");
 		registers.setDir("North-Aisle 3, East-Lobby");
 		locs.add(registers);
 		
@@ -106,14 +112,15 @@ public class World {
 		// Aisle 3
 		Location aisle3 = new Location(4, "Aisle 3");
 		aisle3.setLoc("You are in Aisle 3");
-		aisle3.setDescrip("A CRAZY GUY starts running down the aisle!");
+		aisle3.setDescrip("A CRAZY GUY starts running down the aisle! \nEnter \"talk\" to see what he has to say.");
 		aisle3.setDir("North-Deli, West-Aisle 2, East-Produce, South-Cash Registers");
 		locs.add(aisle3);
 		
 		// Deli
 		Location deli = new Location(5, "Deli");
 		deli.setLoc("You are in the deli section.");
-		deli.setDescrip("No one seems to be around. There is a sign that reads, 'RING BELL for service'.");
+		deli.setDescrip("No one seems to be around. There is a sign that reads, 'RING BELL for service'. \n"
+				+ "Enter \"ring bell\" to ring the bell..... If you dare.");
 		deli.setDir("West-Dairy, South-Aisle 3");
 		locs.add(deli);
 		

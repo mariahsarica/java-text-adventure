@@ -28,6 +28,9 @@ public class GameEngine {
 	public static JTextArea output;
 	public static JTextArea inv;
 	
+	// Ringing the bell in the deli triggers the end game scenario and player is unable to execute commands.
+	// Game flows normally if false.
+	private static boolean END_GAME_SCENARIO = false;
 	
 	/**
 	 * Constructor
@@ -86,7 +89,10 @@ public class GameEngine {
         	command = userInput.toLowerCase();
         	nextToken = null;
         }
-        	
+        
+        
+        if (END_GAME_SCENARIO == false) { 
+        
         	   if (command.equals("n")) {    				    // Moves north
         	Player.move(0);
     	} else if (command.equals("s")) {    			        // Moves south
@@ -144,10 +150,26 @@ public class GameEngine {
    					errorMessage();
    				}
    			}
+   			
+   		} else if (command.equals("talk")) {
+   			Player.interactWithSpecialItem(4, 6);
+   			
+   		} else if (command.equals("smile")) {
+   			Player.interactWithSpecialItem(1, 3);
    		
+   		} else if (command.equals("ring")) {
+   			Player.interactWithSpecialItem(5, 7);
+   			END_GAME_SCENARIO = true;
+   			
    		} else {
    			errorMessage();
    		}
+       
+        }
+        
+        if (command.equals("q")) {    				    // Quits game
+		quit();
+        }
         	
 	}
 	

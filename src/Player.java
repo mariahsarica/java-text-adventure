@@ -179,6 +179,23 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * The interactWithCharacter method allows the user interact with characters that pop up in the game and other speical items.
+	 * @param charLocId Id of the location that the character is present in
+	 * @param charItemId Id of the character in the items ArrayList
+	 */
+	public static void interactWithSpecialItem(int itemLocId, int itemId) {
+		if (currentLoc == itemLocId) {
+			if (World.locs.get(itemLocId).hasViewed == true) {
+				GameEngine.output.append(World.items.get(itemId).getDescrip());
+			} else {
+				GameEngine.errorMessage();
+			}
+		} else {
+			GameEngine.errorMessage();
+		}
+	}
+	
 	private static void gameOver1() {
 		GameEngine.warningMessage("Oh no! You have reached 20 moves! Game Over.");
 		GameEngine.quit();

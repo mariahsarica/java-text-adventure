@@ -10,7 +10,7 @@ public class Location {
 	private String name;		  		// Name of location
 	private String loc;		 	  		// Statement that tells player what location they're in once they enter it
 	private String description;   		// Description of what is in location (to be shown after player searches)
-	public boolean hasViewed = false;
+	public boolean hasViewed = false;	// Whether or not player has looked around the room
 	private String directions;    		// Movable directions avail from current location
 	
 	/**
