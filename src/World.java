@@ -76,55 +76,58 @@ public class World {
 		 */
 		// Lobby
 		Location lobby = new Location(0, "Lobby");
-		lobby.setDescrip("You are in the lobby. There is a row of shopping CARTS to your right "
+		lobby.setLoc("You are in the lobby.");
+		lobby.setDescrip("There is a row of shopping CARTS to your right "
 				+ "and a stand of FLYERS and MAPS to your left.");
 		lobby.setDir("North-Produce, West-Cash Registers");
 		locs.add(lobby);
 		
 		// Cash Registers
 		Location registers = new Location(1, "Cash Registers");
-		registers.setDescrip("You are by the cash registers. You lock eyes with the CASHIER, quick, make a move.");
+		registers.setLoc("You are by the cash registers.");
+		registers.setDescrip("You lock eyes with the CASHIER, quick, make a move.");
 		registers.setDir("North-Aisle 3, East-Lobby");
 		locs.add(registers);
 		
 		// Produce
 		Location produce = new Location(2, "Produce");
-		produce.setDescrip("You are in the produce section. Ahh there is that really "
-				+ "cheap organic CELERY!");
+		produce.setLoc("You are in the produce section.");
+		produce.setDescrip("Ahh there is that really cheap organic CELERY!");
 		produce.setDir("North-Bulk, West-Aisle 3, South-Lobby");
 		locs.add(produce);
 		
 		// Bulk
 		Location bulk = new Location(3, "Bulk");
-		bulk.setDescrip("You are in the bulk section. Oooo so many options, I really "
-				+ "only came in for almond milk and tofu.... but the QUINOA is such a great deal!");
+		bulk.setLoc("You are in the bulk section.");
+		bulk.setDescrip("Oooo so many options, I really only came in for almond milk and tofu.... but the QUINOA is such a great deal!");
 		bulk.setDir("South-Produce");
 		locs.add(bulk);
 		
 		// Aisle 3
 		Location aisle3 = new Location(4, "Aisle 3");
-		aisle3.setDescrip("You are in Aisle 3. A CRAZY GUY starts running down the aisle!");
+		aisle3.setLoc("You are in Aisle 3");
+		aisle3.setDescrip("A CRAZY GUY starts running down the aisle!");
 		aisle3.setDir("North-Deli, West-Aisle 2, East-Produce, South-Cash Registers");
 		locs.add(aisle3);
 		
 		// Deli
 		Location deli = new Location(5, "Deli");
-		deli.setDescrip("You are in the deli section. No one seems to be around. There is a "
-				+ "sign that reads, 'RING BELL for service'.\n\n");
+		deli.setLoc("You are in the deli section.");
+		deli.setDescrip("No one seems to be around. There is a sign that reads, 'RING BELL for service'.");
 		deli.setDir("West-Dairy, South-Aisle 3");
 		locs.add(deli);
 		
 		// Dairy
 		Location dairy = new Location(6, "Dairy");
-		dairy.setDescrip("You are in the dairy section. There is the ALMOND MILK and TOFU "
-				+ "I came in for!");
+		dairy.setLoc("You are in the dairy section.");
+		dairy.setDescrip("There is the ALMOND MILK and TOFU I came in for!");
 		dairy.setDir("East-Deli, South-Aisle 2");
 		locs.add(dairy);
 		
 		// Aisle 2
 		Location aisle2 = new Location(7, "Aisle 2");
-		aisle2.setDescrip("You are in Aisle 2. Ahhh gluten free FLOUR! Might "
-				+ "as well get it while I'm here.");
+		aisle2.setLoc("You are in Aisle 2");
+		aisle2.setDescrip("Ahhh gluten free FLOUR! Might as well get it while I'm here.");
 		aisle2.setDir("North-Dairy, East-Aisle 3");
 		locs.add(aisle2);
 	

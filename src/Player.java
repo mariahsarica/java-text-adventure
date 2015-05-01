@@ -5,15 +5,29 @@
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 
 public class Player {
 
 	public static int currentLoc;									  // Current location of the player
 	public static ArrayList<Item> inventory = new ArrayList<Item>();  // ArrayList of type Item to hold items present in the player's inventory
 	public static int totalMoves = 0;                                 // Keeps track of total number of moves player has made throughout the game
+	public static String name = getUserName();						  // Name of player
 	
-	public Player() {
+	
+	/**
+	 * The getUserName method prompts the user to enter a name.
+	 */
+	private static String getUserName() {
+		String name;
+		name = JOptionPane.showInputDialog(GameEngine.frame, "Enter your name below.", "Enter your name", JOptionPane.PLAIN_MESSAGE);
+		while (name == null || name.equals("")) {
+			name = JOptionPane.showInputDialog(GameEngine.frame, "Enter your name below.", "Enter your name", JOptionPane.PLAIN_MESSAGE);
+		}
+		return name.trim();
 	}
+	
 	
 	/**
 	 * The takeCart method is a special case of the takeItem method, as the
@@ -21,16 +35,20 @@ public class Player {
 	 * @param cart 
 	 */
 	public static void takeCart(Item cart) {
-		if (cart.getTaken() == false) {
-			if (currentLoc == 0) {
-				GameEngine.output.append(cart.getDescrip());
-				cart.setTaken(true);
-				GameEngine.inv.setText("Your cart currently has: \n\n");
+		if (World.locs.get(0).hasViewed == true) {
+			if (cart.getTaken() == false) {
+				if (currentLoc == 0) {
+					GameEngine.output.append(cart.getDescrip());
+					cart.setTaken(true);
+					GameEngine.inv.setText("Your cart currently has: \n\n");
+				} else {
+					GameEngine.informationMessage("Not in this room!");
+				}
 			} else {
-				GameEngine.informationMessage("Not in this room!");
+				GameEngine.informationMessage("You already have a cart!");
 			}
 		} else {
-			GameEngine.informationMessage("You already have a cart!");
+			GameEngine.informationMessage("You must look around the room before you can take any items.");
 		}
 	}
 	
@@ -40,23 +58,27 @@ public class Player {
 	 * @param item Index of item to be taken.
 	 */
 	public static void takeItem(Item item) {
-		if (item.getTakable() == true) {
-			if (World.items.get(0).getTaken() == true) {
+		if (World.locs.get(currentLoc).hasViewed == true) {
+			if (item.getTakable() == true) {
 				if (item.getTaken() == false) {
-					if (currentLoc == item.locId) {
-						addToInv(item);
-						GameEngine.output.append(item.getDescrip());
+					if (World.items.get(0).getTaken() == true) {
+						if (currentLoc == item.locId) {
+							addToInv(item);
+							GameEngine.output.append(item.getDescrip());
+						} else {
+							GameEngine.errorMessage();
+						}
 					} else {
-						GameEngine.informationMessage("Not in this room!");
+						GameEngine.informationMessage("You have nothing to put your groceries in!");
 					}
 				} else {
 					GameEngine.informationMessage("Check your cart, you already have this item!");
 				}
 			} else {
-				GameEngine.informationMessage("You have nothing to put your groceries in!");
+				GameEngine.errorMessage();
 			}
 		} else {
-			GameEngine.errorMessage();
+			GameEngine.informationMessage("You must look around the room before you can take any items.");
 		}
 	}
 	
@@ -128,6 +150,13 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * The look method displays the description of the location.
+	 */
+	public static void look() {
+		GameEngine.output.append(World.locs.get(currentLoc).getDescrip());
+	}
+	
 	
 	/**
 	 * The move method allows the player to move north, south, east, or
@@ -135,16 +164,25 @@ public class Player {
 	 * @param dir Index of direction the player wants to move in.
 	 */
 	public static void move(int dir) {
-		int newLoc = World.nav[currentLoc][dir];
-		if (newLoc < 0) {
-			GameEngine.warningMessage("You cannot go that way.");
+		if (totalMoves != 20) {
+			int newLoc = World.nav[currentLoc][dir];
+			if (newLoc < 0) {
+				GameEngine.warningMessage("You cannot go that way.");
+			} else {
+				currentLoc = newLoc;
+				totalMoves = totalMoves + 1;
+				BreadCrumbTrail.add(currentLoc);
+			}
+			GameEngine.output.append(World.locs.get(currentLoc).getText());    
 		} else {
-			currentLoc = newLoc;
-			totalMoves = totalMoves + 1;
-			BreadCrumbTrail.add(currentLoc);
+			gameOver1();
 		}
-	   
-	   GameEngine.output.append(World.locs.get(currentLoc).getText());    
 	}
+	
+	private static void gameOver1() {
+		GameEngine.warningMessage("Oh no! You have reached 20 moves! Game Over.");
+		GameEngine.quit();
+	}
+	
 	
 }

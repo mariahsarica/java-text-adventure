@@ -23,7 +23,7 @@ import java.awt.event.ActionEvent;
 
 public class GameEngine {
 
-	private static JFrame frame;
+	static JFrame frame;
 	private JTextField input;
 	public static JTextArea output;
 	public static JTextArea inv;
@@ -33,7 +33,6 @@ public class GameEngine {
 	 * Constructor
 	 */
 	public GameEngine() {
-		final GameEngine eng = this;
 		
 		JPanel gui = buildGUI();
 		
@@ -42,10 +41,10 @@ public class GameEngine {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 		    public void windowClosing(WindowEvent e) {
-		        eng.showGoodbye();
+		        showGoodbye();
 		    }
 		});
-		frame.getContentPane().setPreferredSize(new Dimension(500, 400));
+		frame.getContentPane().setPreferredSize(new Dimension(600, 450));
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 	}
@@ -98,6 +97,8 @@ public class GameEngine {
     		Player.move(3);
     	} else if (command.equals("m")) {    				    // Displays map
     		World.map();
+    	} else if (command.equals("l")) {						// Looks around location
+    		Player.look();
     	} else if (command.equals("h")) {    				    // Displays help menu
     		JOptionPane.showMessageDialog(frame, HELP_MSG);;
     	} else if (command.equals("q")) {    				    // Quits game
@@ -109,7 +110,7 @@ public class GameEngine {
     			errorMessage();
     		} else if (item.equals("cart")) {
     			Player.takeCart(World.items.get(0));
-   			} else if (search(item)) {
+   			} else if (searchArr(item)) {
    				int index = getIndex(item);
    				Player.takeItem(World.items.get(index));
    			} else {
@@ -118,7 +119,9 @@ public class GameEngine {
    			
    		} else if (command.equals("d")) {					    // Drops item
    			String item = nextToken;
-   			if (search(item)) {
+   			if (item == null) {
+   				errorMessage();
+   			} else if (searchArr(item)) {
    				int index = getIndex(item);
    				Player.drop(World.items.get(index));
    				if (item.equals("cart")) {
@@ -167,13 +170,13 @@ public class GameEngine {
 	
 	
 	/**
-	 * The search method is used in the take and drop actions. It searches the ArrayList of items
+	 * The searchArr method is used in the take and drop actions. It searches the ArrayList of items
 	 * to see if it contains the item the user wants to take/drop.
 	 * @param item Name of item user wants to take/drop
 	 * @return true if the item is in the ArrayList
 	 * 		   false if it is not
 	 */
-	private boolean search(String item) {
+	private boolean searchArr(String item) {
         for (int i = 0; i < World.items.size(); i++) {
         	if (item.equalsIgnoreCase(World.items.get(i).getName())) {
         		return true;
@@ -231,7 +234,7 @@ public class GameEngine {
 
    		JPanel inputsPanel = this.buildInputControls();
    		
-   		inv = new JTextArea("You need something to put your groceries in! \n\n", 10, 10);
+   		inv = new JTextArea("You need something to put your groceries in! \n\n", 10, 13);
    		inv.setEditable(false);
    		inv.setLineWrap(true);
    		inv.setWrapStyleWord(true);
@@ -258,7 +261,7 @@ public class GameEngine {
 	/**
 	 * The quit method exits the game and displays a goodbye message to the user.
 	 */
-	private void quit() {
+	public static void quit() {
 		showGoodbye();
 		frame.setVisible(false);
 		System.exit(0);
@@ -287,7 +290,7 @@ public class GameEngine {
 	 * intro displays a introductory scene message to the user and starts the player in the lobby.
 	 */
 	private String intro =
-			"Welcome to NATURE’S PANTRY, your favorite "
+			"Welcome to NATURE’S PANTRY, " + Player.name + ", your favorite "
 			+ "alternative grocery store! \n"
 			+ "What was it that I needed to get again? Oh yeah, "
 			+ "almond milk and tofu. \n\n"
@@ -298,15 +301,15 @@ public class GameEngine {
 	 * The showWelcome method informs the user that they are going to be starting the game.
 	 */
 	private void showWelcome() {
-    	JOptionPane.showMessageDialog(frame, "Welcome to NATURE'S PANTRY, click OK to being the game!");
+    	JOptionPane.showMessageDialog(frame, "Welcome to NATURE'S PANTRY, " + Player.name + ", click OK to being the game!");
     }
 	
 	
 	/**
 	 * The showGoodbye method informs the user that the game is over.
 	 */
-	private void showGoodbye() {
-    	JOptionPane.showMessageDialog(frame, "Thank you for visiting Nature's Pantry!");
+	private static void showGoodbye() {
+    	JOptionPane.showMessageDialog(frame, "Thank you for visiting Nature's Pantry, " + Player.name + "!");
     }
 	
 	
