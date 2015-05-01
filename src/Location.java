@@ -31,7 +31,7 @@ public class Location {
 	}
 	
 	public String getDescrip() {
-		return this.description;
+		return this.description + "\n\n";
 	}
 	public void setDescrip(String descrip) {
 		this.description = descrip;
@@ -45,8 +45,8 @@ public class Location {
 	}
 	
 	public String getText() {
-		return this.description + "\n" + this.getDir() + "\nTotal Moves: " + Player.totalMoves 
-				+ "\nSteps from Beginning: " + BreadCrumbTrail.stepsFromBeg;
+		return this.getDescrip() + this.getDir() + "\nTotal Moves: " + Player.totalMoves 
+				+ "\nSteps from Beginning: " + BreadCrumbTrail.stepsFromBeg + "\n\n";
 	}
 
 }

@@ -38,7 +38,7 @@ public class Item {
 	}
 	
 	public String getDescrip() {
-		return this.description;
+		return this.description + "\n\n";
 	}
 	public void setDescrip(String descrip) {
 		this.description = descrip;

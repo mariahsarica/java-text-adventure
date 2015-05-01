@@ -5,6 +5,7 @@
 
 import java.util.ArrayList;
 
+
 public class Player {
 
 	public static int currentLoc;									  // Current location of the player
@@ -22,13 +23,14 @@ public class Player {
 	public static void takeCart(Item cart) {
 		if (cart.getTaken() == false) {
 			if (currentLoc == 0) {
-				System.out.println(cart.getDescrip());
+				GameEngine.output.append(cart.getDescrip());
 				cart.setTaken(true);
+				GameEngine.inv.setText("Your cart currently has: \n\n");
 			} else {
-				System.out.println("Not in this room!");
+				GameEngine.informationMessage("Not in this room!");
 			}
 		} else {
-			System.out.println("You already have a cart!");
+			GameEngine.informationMessage("You already have a cart!");
 		}
 	}
 	
@@ -43,18 +45,18 @@ public class Player {
 				if (item.getTaken() == false) {
 					if (currentLoc == item.locId) {
 						addToInv(item);
-						System.out.println(item.getDescrip());
+						GameEngine.output.append(item.getDescrip());
 					} else {
-						System.out.println("Not in this room!");
+						GameEngine.informationMessage("Not in this room!");
 					}
 				} else {
-					System.out.println("Check your cart, you already have this item!");
+					GameEngine.informationMessage("Check your cart, you already have this item!");
 				}
 			} else {
-				System.out.println("You have nothing to put your groceries in!");
+				GameEngine.informationMessage("You have nothing to put your groceries in!");
 			}
 		} else {
-			System.out.println("Invalid action.");
+			GameEngine.errorMessage();
 		}
 	}
 	
@@ -66,6 +68,7 @@ public class Player {
 	public static void addToInv(Item item) {
 		inventory.add(item);
 		item.setTaken(true);
+		GameEngine.inv.append(item.getName() + "\n");
 	}
 	
 	
@@ -76,6 +79,8 @@ public class Player {
 	public static void removeFromInv(Item item) {
 		inventory.remove(item);
 		item.setTaken(false);
+		String i = GameEngine.inv.getText();
+		GameEngine.inv.setText(i.replace(item.getName() + "\n", ""));
 	}
 	
 	
@@ -87,31 +92,12 @@ public class Player {
 		if (item.getTakable() == true) {
 			if (item.getTaken() == true) {
 				removeFromInv(item);
-				System.out.println("You have dropped the " + item.getName().toLowerCase() + ".");
+				GameEngine.output.append("You have dropped the " + item.getName().toLowerCase() + ".\n\n");
 			} else {
-				System.out.println("You don't have this item.");
+				GameEngine.informationMessage("You don't have this item.");
 			}
 		} else {
-			System.out.println("Invalid action.");
-		}
-	}
-	
-	
-	/**
-	 * The checkInv method prints out the player's current inventory.
-	 */
-	public static void checkInv() {
-		if (World.items.get(0).getTaken() == true) {
-			if (inventory.size() > 0) {
-				System.out.println("Your cart currently has: ");
-				for (int i = 0; i < inventory.size(); i++) {
-					System.out.println(inventory.get(i).getName());
-				}
-			} else {
-				System.out.println("You haven't added any items to your cart yet!");
-			}	
-		} else {
-			System.out.println("You don't have anything!");
+			GameEngine.errorMessage();
 		}
 	}
 	
@@ -123,12 +109,13 @@ public class Player {
 	 */
 	public static void backtrack(int steps) {
 		if (BreadCrumbTrail.stepsFromBeg == 0) {
-			System.out.println("You are already at the beginning of your experience in NATURE'S PANTRY!");
+			GameEngine.informationMessage("You are already at the beginning of your experience in NATURE'S PANTRY!");
 		} else if (steps > BreadCrumbTrail.stepsFromBeg) {
-			System.out.println("You cannot backtrack more steps than you've taken! Refer to the value listed next to \n"
-					+ "\"Steps from Beginning\" for the maximum number of steps you may backtrack.");
+			GameEngine.warningMessage("You cannot backtrack more steps than you've taken! \n"
+					+ "Refer to the value listed next to \"Steps from Beginning\" \n"
+					+ "for the maximum number of steps you may backtrack.");
 		} else if (steps <= 0) {
-			System.out.println("Enter a positive number of steps to backtrack.");
+			GameEngine.warningMessage("Enter a positive number of steps to backtrack.");
 		} else {
 			BreadCrumbTrail.remove(steps);
 			if (BreadCrumbTrail.last == null) {
@@ -137,7 +124,7 @@ public class Player {
 				currentLoc = BreadCrumbTrail.last.value;
 			}
 			totalMoves = totalMoves + 1; 
-			System.out.println(World.locs.get(currentLoc).getText());
+			GameEngine.output.append(World.locs.get(currentLoc).getText());
 		}
 	}
 	
@@ -150,14 +137,14 @@ public class Player {
 	public static void move(int dir) {
 		int newLoc = World.nav[currentLoc][dir];
 		if (newLoc < 0) {
-			System.out.println("You cannot go that way.");
+			GameEngine.warningMessage("You cannot go that way.");
 		} else {
 			currentLoc = newLoc;
 			totalMoves = totalMoves + 1;
 			BreadCrumbTrail.add(currentLoc);
 		}
 	   
-	    System.out.println(World.locs.get(currentLoc).getText());    
+	   GameEngine.output.append(World.locs.get(currentLoc).getText());    
 	}
 	
 }
