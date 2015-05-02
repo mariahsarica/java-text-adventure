@@ -42,7 +42,7 @@ public class World {
 		
 		// Map
 		Item map = new Item(2, "MAP", true);
-		map.setDescrip("You have picked up a map of the store! Key in 'm' to view it.");
+		map.setDescrip("You have picked up a map of the store! Key in 'M' to view it.");
 		map.setLocId(0);
 		items.add(map);
 		
@@ -72,9 +72,18 @@ public class World {
 		
 		// Bell
 		Item bell = new Item(7, "BELL", false);
-		bell.setDescrip("Something crazy happens");
+		bell.setDescrip("A shadowy figure emerges from the back... AHHHH IT'S THE CABBAGE CRUSHER!! \n"
+				+ "No turning back now, you must defeat him! \n"
+				+ "To fight using your grocery items type \"Use [ITEM_NAME]\", or \n"
+				+ "type 'P' to punch!");
 		bell.setLocId(5);
 		items.add(bell);
+		
+		// GF Flour
+		Item flour = new Item(8, "FLOUR", true);
+		flour.setDescrip("*Checks flour off list*");
+		flour.setLocId(7);
+		items.add(flour);
 		
 		
 		/**
@@ -105,7 +114,7 @@ public class World {
 		// Bulk
 		Location bulk = new Location(3, "Bulk");
 		bulk.setLoc("You are in the bulk section.");
-		bulk.setDescrip("Oooo so many options, I really only came in for almond milk and tofu.... but the QUINOA is such a great deal!");
+		bulk.setDescrip("Oooo so many options, I really only came in for flour and tofu.... but the QUINOA is such a great deal!");
 		bulk.setDir("South-Produce");
 		locs.add(bulk);
 		
@@ -127,14 +136,14 @@ public class World {
 		// Dairy
 		Location dairy = new Location(6, "Dairy");
 		dairy.setLoc("You are in the dairy section.");
-		dairy.setDescrip("There is the ALMOND MILK and TOFU I came in for!");
+		dairy.setDescrip("There is the TOFU I came in for!");
 		dairy.setDir("East-Deli, South-Aisle 2");
 		locs.add(dairy);
 		
 		// Aisle 2
 		Location aisle2 = new Location(7, "Aisle 2");
 		aisle2.setLoc("You are in Aisle 2");
-		aisle2.setDescrip("Ahhh gluten free FLOUR! Might as well get it while I'm here.");
+		aisle2.setDescrip("Ahhh gluten free FLOUR! And for the low price of $2.31! This store never ceases to surprise me :)");
 		aisle2.setDir("North-Dairy, East-Aisle 3");
 		locs.add(aisle2);
 	

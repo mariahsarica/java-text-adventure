@@ -160,6 +160,7 @@ public class GameEngine {
    		} else if (command.equals("ring")) {
    			Player.interactWithSpecialItem(5, 7);
    			END_GAME_SCENARIO = true;
+   			Player.displayHealthStats();
    			
    		} else {
    			errorMessage();
@@ -168,8 +169,12 @@ public class GameEngine {
         }
         
         if (command.equals("q")) {    				    // Quits game
-		quit();
+        	quit();
+		
+        } else if (command.equals("p")) {
+        	Player.punch();
         }
+        
         	
 	}
 	
@@ -315,7 +320,7 @@ public class GameEngine {
 			"Welcome to NATURE’S PANTRY, " + Player.name + ", your favorite "
 			+ "alternative grocery store! \n"
 			+ "What was it that I needed to get again? Oh yeah, "
-			+ "almond milk and tofu. \n\n"
+			+ "gluten free flour and tofu. \n\n"
 			+ World.locs.get(Player.currentLoc).getText();
 
 	

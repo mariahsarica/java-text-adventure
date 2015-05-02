@@ -4,6 +4,7 @@
  */
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -14,6 +15,9 @@ public class Player {
 	public static ArrayList<Item> inventory = new ArrayList<Item>();  // ArrayList of type Item to hold items present in the player's inventory
 	public static int totalMoves = 0;                                 // Keeps track of total number of moves player has made throughout the game
 	public static String name = getUserName();						  // Name of player
+	
+	public static int playerHealth = 100;
+	public static int bossHealth = 150;
 	
 	
 	/**
@@ -26,6 +30,18 @@ public class Player {
 			name = JOptionPane.showInputDialog(GameEngine.frame, "Enter your name below.", "Enter your name", JOptionPane.PLAIN_MESSAGE);
 		}
 		return name.trim();
+	}
+	
+	public static void displayHealthStats() {
+		GameEngine.output.append("Your Health: " + playerHealth + "\nBoss Health: " + bossHealth + "\n\n");
+		if (bossHealth < 1) {
+			GameEngine.informationMessage("YOU WIN!! YOU HAVE DEFEATED THE CABBAGE CRUSHER AND SAVED NATURE'S PANTRY!!");
+			GameEngine.quit();
+		}
+		if (playerHealth < 1) {
+			GameEngine.informationMessage("Dead");
+			GameEngine.quit();
+		}
 	}
 	
 	
@@ -175,12 +191,12 @@ public class Player {
 			}
 			GameEngine.output.append(World.locs.get(currentLoc).getText());    
 		} else {
-			gameOver1();
+			maxMovesReached();
 		}
 	}
 	
 	/**
-	 * The interactWithCharacter method allows the user interact with characters that pop up in the game and other speical items.
+	 * The interactWithCharacter method allows the user interact with characters that pop up in the game and other special items.
 	 * @param charLocId Id of the location that the character is present in
 	 * @param charItemId Id of the character in the items ArrayList
 	 */
@@ -196,9 +212,29 @@ public class Player {
 		}
 	}
 	
-	private static void gameOver1() {
+	private static void maxMovesReached() {
 		GameEngine.warningMessage("Oh no! You have reached 20 moves! Game Over.");
 		GameEngine.quit();
+	}
+	
+	
+	public static int randomNum() {
+	    Random num = new Random();
+	    int randomNum = num.nextInt((20 - 1) + 1) + 1;
+	    return randomNum;
+	}
+	
+	public static void punch() {
+		int playerAttack = randomNum();
+		GameEngine.output.append("POW! " + playerAttack + " damage!!" + "\n");
+		
+		int bossAttack = 10 + randomNum();
+		GameEngine.output.append("BOOM! The Cabbage Crusher counters! -" + bossAttack + " health" + "\n\n");
+		
+		playerHealth = playerHealth - bossAttack;
+		bossHealth = bossHealth - playerAttack;
+		
+		displayHealthStats();
 	}
 	
 	
