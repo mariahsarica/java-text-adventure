@@ -54,9 +54,5 @@ public class Location {
 		this.directions = dir;
 	}
 	
-	public String getText() {
-		return this.getLoc() + this.getDir() + "\nTotal Moves: " + Player.totalMoves 
-				+ "\nSteps from Beginning: " + BreadCrumbTrail.stepsFromBeg + "\n\n";
-	}
 
 }

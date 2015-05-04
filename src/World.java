@@ -94,35 +94,42 @@ public class World {
 		lobby.setLoc("You are in the lobby.");
 		lobby.setDescrip("There is a row of shopping CARTS to your right "
 				+ "and a stand of FLYERS and MAPS to your left.");
-		lobby.setDir("North-Produce, West-Cash Registers");
+		lobby.setDir("<html>&emsp; <b>North</b> - Produce           <br>"
+					     + "&emsp; <b>West</b>  - Cash Registers </html>");
 		locs.add(lobby);
 		
 		// Cash Registers
 		Location registers = new Location(1, "Cash Registers");
 		registers.setLoc("You are by the cash registers.");
 		registers.setDescrip("You lock eyes with the CASHIER, quick, make a move. \nEnter \"smile\" to smile.");
-		registers.setDir("North-Aisle 3, East-Lobby");
+		registers.setDir("<html>&emsp; <b>North</b> - Aisle 3    <br>"
+						     + "&emsp; <b>East</b>  - Lobby   </html>");
 		locs.add(registers);
 		
 		// Produce
 		Location produce = new Location(2, "Produce");
 		produce.setLoc("You are in the produce section.");
 		produce.setDescrip("Ahh there is that really cheap organic CELERY!");
-		produce.setDir("North-Bulk, West-Aisle 3, South-Lobby");
+		produce.setDir("<html>&emsp; <b>North</b> - Bulk       <br>"
+						   + "&emsp; <b>West</b>  - Aisle 3    <br>"
+						   + "&emsp; <b>South</b> - Lobby   </html>");
 		locs.add(produce);
 		
 		// Bulk
 		Location bulk = new Location(3, "Bulk");
 		bulk.setLoc("You are in the bulk section.");
 		bulk.setDescrip("Oooo so many options, I really only came in for flour and tofu.... but the QUINOA is such a great deal!");
-		bulk.setDir("South-Produce");
+		bulk.setDir("<html>&emsp; <b>South</b> - Produce </html>");
 		locs.add(bulk);
 		
 		// Aisle 3
 		Location aisle3 = new Location(4, "Aisle 3");
 		aisle3.setLoc("You are in Aisle 3");
 		aisle3.setDescrip("A CRAZY GUY starts running down the aisle! \nEnter \"talk\" to see what he has to say.");
-		aisle3.setDir("North-Deli, West-Aisle 2, East-Produce, South-Cash Registers");
+		aisle3.setDir("<html>&emsp; <b>North</b> - Deli              <br>"
+						  + "&emsp; <b>West</b>  - Aisle 2           <br>"
+						  + "&emsp; <b>East</b>  - Produce           <br>"
+						  + "&emsp; <b>South</b> - Cash Registers </html>");
 		locs.add(aisle3);
 		
 		// Deli
@@ -130,21 +137,24 @@ public class World {
 		deli.setLoc("You are in the deli section.");
 		deli.setDescrip("No one seems to be around. There is a sign that reads, 'RING BELL for service'. \n"
 				+ "Enter \"ring bell\" to ring the bell..... If you dare.");
-		deli.setDir("West-Dairy, South-Aisle 3");
+		deli.setDir("<html>&emsp; <b>West</b>  - Dairy      <br>"
+						+ "&emsp; <b>South</b> - Aisle 3 </html>");
 		locs.add(deli);
 		
 		// Dairy
 		Location dairy = new Location(6, "Dairy");
 		dairy.setLoc("You are in the dairy section.");
 		dairy.setDescrip("There is the TOFU I came in for!");
-		dairy.setDir("East-Deli, South-Aisle 2");
+		dairy.setDir("<html>&emsp; <b>East</b>  - Deli       <br>"
+						 + "&emsp; <b>South</b> - Aisle 2 </html>");
 		locs.add(dairy);
 		
 		// Aisle 2
 		Location aisle2 = new Location(7, "Aisle 2");
 		aisle2.setLoc("You are in Aisle 2");
 		aisle2.setDescrip("Ahhh gluten free FLOUR! And for the low price of $2.31! This store never ceases to surprise me :)");
-		aisle2.setDir("North-Dairy, East-Aisle 3");
+		aisle2.setDir("<html>&emsp; <b>North</b> - Dairy      <br>"
+						  + "&emsp; <b>East</b>  - Aisle 3 </html>");
 		locs.add(aisle2);
 	
 		/**

@@ -3,6 +3,8 @@
  * @author Mariah Molenaer
  */
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,6 +30,11 @@ public class GameEngine {
 	public static JTextArea output;
 	public static JTextArea inv;
 	
+	private static JLabel currentLocInfo;
+	private static JLabel movesInfo;
+	private static JLabel backtrackInfo;
+	private static JLabel directionsInfo;
+	
 	// Ringing the bell in the deli triggers the end game scenario and player is unable to execute commands.
 	// Game flows normally if false.
 	private static boolean END_GAME_SCENARIO = false;
@@ -47,7 +54,7 @@ public class GameEngine {
 		        showGoodbye();
 		    }
 		});
-		frame.getContentPane().setPreferredSize(new Dimension(600, 450));
+		frame.getContentPane().setPreferredSize(new Dimension(850, 450));
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 	}
@@ -166,13 +173,26 @@ public class GameEngine {
    			errorMessage();
    		}
        
-        }
+        } else {
         
-        if (command.equals("q")) {    				    // Quits game
+        if (command.equals("q")) {    				    	    // Quits game
         	quit();
 		
         } else if (command.equals("p")) {
         	Player.punch();
+       
+        } else if (command.equals("use")) {
+        	String item = nextToken;
+        	if (item == null) {
+        		informationMessage("Enter an item you want to use.");
+        	} else if (searchArr(item)) {
+        		int index = getIndex(item);
+        		if (World.items.get(index).getTaken() == true) {
+        			Player.use(World.items.get(index));
+        		}
+        		
+        	} 
+        }
         }
         
         	
@@ -244,6 +264,40 @@ public class GameEngine {
 	}
 	
 	
+	public static void updateStatus() {
+		currentLocInfo.setText("Current Location: " + World.locs.get(Player.currentLoc).getName()); 
+		movesInfo.setText("Total Moves: " + Player.totalMoves);
+		backtrackInfo.setText("Steps from Beginning: " + BreadCrumbTrail.stepsFromBeg);
+		directionsInfo.setText(World.locs.get(Player.currentLoc).getDir());
+	}
+	
+	private JPanel buildStatusInfo() {
+		
+		currentLocInfo = new JLabel();
+		movesInfo = new JLabel();
+		backtrackInfo = new JLabel();
+		
+		JLabel dir = new JLabel("Directions available:");
+		directionsInfo = new JLabel();
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setPreferredSize(new Dimension(206, 0));
+			panel.add(Box.createVerticalStrut(10));
+		panel.add(currentLocInfo);
+			panel.add(Box.createVerticalStrut(10));
+		panel.add(dir);
+		panel.add(directionsInfo);
+			panel.add(Box.createVerticalStrut(10));
+		panel.add(movesInfo);
+		panel.add(backtrackInfo);
+		updateStatus();
+		return panel;
+
+		
+	}
+	
+	
 	/**
 	 * The buildGUI method puts together all the input controls and output styles for the GUI.
 	 */
@@ -260,15 +314,17 @@ public class GameEngine {
    		title.setHorizontalAlignment(JLabel.CENTER);
 
    		JPanel inputsPanel = this.buildInputControls();
+   		JPanel statusPanel = this.buildStatusInfo();
    		
-   		inv = new JTextArea("You need something to put your groceries in! \n\n", 10, 13);
+   		inv = new JTextArea("You need something to put your groceries in! \n\n", 0, 13);
    		inv.setEditable(false);
    		inv.setLineWrap(true);
    		inv.setWrapStyleWord(true);
 
    		JPanel panel = new JPanel();
-   		panel.setLayout(new BorderLayout(20, 10));
+   		panel.setLayout(new BorderLayout(20, 0));
    		panel.add(title, BorderLayout.PAGE_START);
+   		panel.add(statusPanel, BorderLayout.LINE_START);
    		panel.add(scroll, BorderLayout.CENTER);
    		panel.add(inv, BorderLayout.LINE_END);
    		panel.add(inputsPanel, BorderLayout.PAGE_END);
@@ -319,9 +375,9 @@ public class GameEngine {
 	private String intro =
 			"Welcome to NATURE’S PANTRY, " + Player.name + ", your favorite "
 			+ "alternative grocery store! \n"
-			+ "What was it that I needed to get again? Oh yeah, "
-			+ "gluten free flour and tofu. \n\n"
-			+ World.locs.get(Player.currentLoc).getText();
+			+ "What was it that I needed to get again? Oh yeah! "
+			+ "Gluten free flour and tofu. Sounds like an easy enough plan... \n\n"
+			+ World.locs.get(Player.currentLoc).getLoc();
 
 	
 	/**

@@ -16,8 +16,8 @@ public class Player {
 	public static int totalMoves = 0;                                 // Keeps track of total number of moves player has made throughout the game
 	public static String name = getUserName();						  // Name of player
 	
-	public static int playerHealth = 100;
-	public static int bossHealth = 150;
+	private static int playerHealth = 100;
+	private static int bossHealth = 150;
 	
 	
 	/**
@@ -162,7 +162,8 @@ public class Player {
 				currentLoc = BreadCrumbTrail.last.value;
 			}
 			totalMoves = totalMoves + 1; 
-			GameEngine.output.append(World.locs.get(currentLoc).getText());
+			GameEngine.output.append(World.locs.get(currentLoc).getLoc());
+			GameEngine.updateStatus();
 		}
 	}
 	
@@ -189,16 +190,17 @@ public class Player {
 				totalMoves = totalMoves + 1;
 				BreadCrumbTrail.add(currentLoc);
 			}
-			GameEngine.output.append(World.locs.get(currentLoc).getText());    
+			GameEngine.output.append(World.locs.get(currentLoc).getLoc());  
+			GameEngine.updateStatus();
 		} else {
 			maxMovesReached();
 		}
 	}
 	
 	/**
-	 * The interactWithCharacter method allows the user interact with characters that pop up in the game and other special items.
-	 * @param charLocId Id of the location that the character is present in
-	 * @param charItemId Id of the character in the items ArrayList
+	 * The interactWithSpecialItem method allows the user interact with characters that pop up in the game and other special items.
+	 * @param itemLocId Id of the location that the item is present in
+	 * @param itemId Id of the item in the items ArrayList
 	 */
 	public static void interactWithSpecialItem(int itemLocId, int itemId) {
 		if (currentLoc == itemLocId) {
@@ -217,16 +219,20 @@ public class Player {
 		GameEngine.quit();
 	}
 	
-	
+	/**
+	 * The randomNum method generates a random number from 1-20.
+	 */
 	public static int randomNum() {
 	    Random num = new Random();
 	    int randomNum = num.nextInt((20 - 1) + 1) + 1;
 	    return randomNum;
 	}
 	
-	public static void punch() {
-		int playerAttack = randomNum();
-		GameEngine.output.append("POW! " + playerAttack + " damage!!" + "\n");
+	
+	private static void attack(int damage, String attackMsg) {
+		
+		int playerAttack = damage;
+		GameEngine.output.append(attackMsg + playerAttack + " damage!!" + "\n");
 		
 		int bossAttack = 10 + randomNum();
 		GameEngine.output.append("BOOM! The Cabbage Crusher counters! -" + bossAttack + " health" + "\n\n");
@@ -234,8 +240,35 @@ public class Player {
 		playerHealth = playerHealth - bossAttack;
 		bossHealth = bossHealth - playerAttack;
 		
+		
+	}
+
+	public static void punch() {
+		attack(randomNum(), "POW! ");
+		
 		displayHealthStats();
 	}
 	
+	public static void use(Item item) {
+		
+		if (item.getName() == "CELERY") {
+			attack(30, "BAM! You take out each stalk of celery and bash them over his cabbage head!! ");
+		
+		} else if (item.getName() == "QUINOA") {
+			attack(40, "WOOSH! You rip open your bag of quinoa and pour it all over the floor to make him fall on his cabbage butt! ");
+		
+		} else if (item.getName() == "TOFU") {
+			attack(50, "SLAAPPP!!! You open up your tofu and slap it all in his veggie face! ");
+			
+		} else if (item.getName() == "FLOUR") {
+			attack(50, "POOOFFF!! You tear open your bag of gluten free flour and it gets right in his brusselly eyes!! ");
+			
+		}
+			
+		removeFromInv(item);
+		displayHealthStats();
+			
+		
+	}
 	
 }
