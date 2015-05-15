@@ -85,6 +85,11 @@ public class World {
 		flour.setLocId(7);
 		items.add(flour);
 		
+		Item tofu = new Item(9, "TOFU", true);
+		tofu.setDescrip("Yummm can't wait to grill this up later!");
+		tofu.setLocId(6);
+		items.add(tofu);
+		
 		
 		/**
 		 * LOCATIONS
@@ -124,7 +129,7 @@ public class World {
 		
 		// Aisle 3
 		Location aisle3 = new Location(4, "Aisle 3");
-		aisle3.setLoc("You are in Aisle 3");
+		aisle3.setLoc("You are in Aisle 3.");
 		aisle3.setDescrip("A CRAZY GUY starts running down the aisle! \nEnter \"talk\" to see what he has to say.");
 		aisle3.setDir("<html>&emsp; <b>North</b> - Deli              <br>"
 						  + "&emsp; <b>West</b>  - Aisle 2           <br>"
@@ -151,12 +156,13 @@ public class World {
 		
 		// Aisle 2
 		Location aisle2 = new Location(7, "Aisle 2");
-		aisle2.setLoc("You are in Aisle 2");
+		aisle2.setLoc("You are in Aisle 2.");
 		aisle2.setDescrip("Ahhh gluten free FLOUR! And for the low price of $2.31! This store never ceases to surprise me :)");
 		aisle2.setDir("<html>&emsp; <b>North</b> - Dairy      <br>"
 						  + "&emsp; <b>East</b>  - Aisle 3 </html>");
 		locs.add(aisle2);
 	
+		
 		/**
 		 * Navigation Matrix
 		 */
@@ -174,6 +180,7 @@ public class World {
 		};
 		
 	}
+	
 	
 	/**
 	 * The map method displays a map of NATURE'S PANTRY (only if the user has picked it up).

@@ -16,12 +16,12 @@ public class Player {
 	public static int totalMoves = 0;                                 // Keeps track of total number of moves player has made throughout the game
 	public static String name = getUserName();						  // Name of player
 	
-	private static int playerHealth = 100;
-	private static int bossHealth = 150;
+	private static int playerHealth = 100;							  // Player health
+	private static int bossHealth = 150;						      // Boss health
 	
 	
 	/**
-	 * The getUserName method prompts the user to enter a name.
+	 * The getUserName method prompts the user to enter a name before the game starts.
 	 */
 	private static String getUserName() {
 		String name;
@@ -30,18 +30,6 @@ public class Player {
 			name = JOptionPane.showInputDialog(GameEngine.frame, "Enter your name below.", "Enter your name", JOptionPane.PLAIN_MESSAGE);
 		}
 		return name.trim();
-	}
-	
-	public static void displayHealthStats() {
-		GameEngine.output.append("Your Health: " + playerHealth + "\nBoss Health: " + bossHealth + "\n\n");
-		if (bossHealth < 1) {
-			GameEngine.informationMessage("YOU WIN!! YOU HAVE DEFEATED THE CABBAGE CRUSHER AND SAVED NATURE'S PANTRY!!");
-			GameEngine.quit();
-		}
-		if (playerHealth < 1) {
-			GameEngine.informationMessage("Dead");
-			GameEngine.quit();
-		}
 	}
 	
 	
@@ -132,7 +120,7 @@ public class Player {
 				removeFromInv(item);
 				GameEngine.output.append("You have dropped the " + item.getName().toLowerCase() + ".\n\n");
 			} else {
-				GameEngine.informationMessage("You don't have this item.");
+				GameEngine.errorMessage();
 			}
 		} else {
 			GameEngine.errorMessage();
@@ -166,6 +154,7 @@ public class Player {
 			GameEngine.updateStatus();
 		}
 	}
+	
 	
 	/**
 	 * The look method displays the description of the location.
@@ -214,10 +203,14 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * The maxMovesReached method ends the game if the player has reached 20 moves.
+	 */
 	private static void maxMovesReached() {
 		GameEngine.warningMessage("Oh no! You have reached 20 moves! Game Over.");
 		GameEngine.quit();
 	}
+	
 	
 	/**
 	 * The randomNum method generates a random number from 1-20.
@@ -229,26 +222,61 @@ public class Player {
 	}
 	
 	
+	/**
+	 * The displayHealthStats method displays the player and boss' health values during the end game scenario
+	 */
+	public static void displayHealthStats() {
+		// Direction Labels will now hold the health stats
+		GameEngine.directionsLabel.setText("Your Health: " + playerHealth);   
+		GameEngine.directionsInfo.setText("Boss Health: " + bossHealth);
+		
+		GameEngine.movesInfo.setText("");
+		GameEngine.backtrackInfo.setText("");
+		
+		if (bossHealth < 1) {
+			GameEngine.informationMessage("YOU WIN!! YOU HAVE DEFEATED THE CABBAGE CRUSHER AND SAVED NATURE'S PANTRY!!");
+			GameEngine.quit();
+		}
+		if (playerHealth < 1) {
+			GameEngine.informationMessage("Dead");
+			GameEngine.quit();
+		}
+	}
+	
+	
+	/**
+	 * The attack method sets up a player attack, generates a random boss attack, and updates their health values
+	 * @param damage Amount of damage the player attack is worth
+	 * @param attackMsg Description of the player attack
+	 */
 	private static void attack(int damage, String attackMsg) {
 		
 		int playerAttack = damage;
 		GameEngine.output.append(attackMsg + playerAttack + " damage!!" + "\n");
 		
-		int bossAttack = 10 + randomNum();
+		int bossAttack = 5 + randomNum();
 		GameEngine.output.append("BOOM! The Cabbage Crusher counters! -" + bossAttack + " health" + "\n\n");
 		
 		playerHealth = playerHealth - bossAttack;
-		bossHealth = bossHealth - playerAttack;
-		
+		bossHealth = bossHealth - playerAttack;	
 		
 	}
 
+	
+	/**
+	 * The punch method allows the player to punch as an attack on the boss
+	 */
 	public static void punch() {
 		attack(randomNum(), "POW! ");
 		
 		displayHealthStats();
 	}
 	
+	
+	/**
+	 * The use method allows the player to use a grocery item to attack then removes it from the inventory
+	 * @param item Item the player wants to use to attack
+	 */
 	public static void use(Item item) {
 		
 		if (item.getName() == "CELERY") {
@@ -267,7 +295,6 @@ public class Player {
 			
 		removeFromInv(item);
 		displayHealthStats();
-			
 		
 	}
 	

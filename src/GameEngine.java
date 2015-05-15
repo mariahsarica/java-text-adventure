@@ -27,13 +27,14 @@ public class GameEngine {
 
 	static JFrame frame;
 	private JTextField input;
-	public static JTextArea output;
-	public static JTextArea inv;
+	static JTextArea output;
+	static JTextArea inv;
 	
-	private static JLabel currentLocInfo;
-	private static JLabel movesInfo;
-	private static JLabel backtrackInfo;
-	private static JLabel directionsInfo;
+	static JLabel currentLocInfo;
+	static JLabel movesInfo;
+	static JLabel backtrackInfo;
+	static JLabel directionsLabel;
+	static JLabel directionsInfo;
 	
 	// Ringing the bell in the deli triggers the end game scenario and player is unable to execute commands.
 	// Game flows normally if false.
@@ -84,10 +85,12 @@ public class GameEngine {
 	 */
 	private void commandReader() {
 		
-		String userInput = this.getInput();
-        String command;
-        String nextToken;
-        	
+		// Used to read commands without spaces
+		String userInput = this.getInput().toLowerCase();
+        
+		// Used to read commands with spaces
+		String command;
+        String nextToken;	
         if (userInput.contains(" ")) {
         	String [] rawInput = userInput.split(" ");
         	command = rawInput[0].toLowerCase();
@@ -100,21 +103,21 @@ public class GameEngine {
         
         if (END_GAME_SCENARIO == false) { 
         
-        	   if (command.equals("n")) {    				    // Moves north
+        	   if (userInput.equals("n")) {    				    // Moves north
         	Player.move(0);
-    	} else if (command.equals("s")) {    			        // Moves south
+    	} else if (userInput.equals("s")) {    			        // Moves south
     		Player.move(1);
-    	} else if (command.equals("e")) {    				    // Moves east
+    	} else if (userInput.equals("e")) {    				    // Moves east
     		Player.move(2);
-    	} else if (command.equals("w")) {    				    // Moves west
+    	} else if (userInput.equals("w")) {    				    // Moves west
     		Player.move(3);
-    	} else if (command.equals("m")) {    				    // Displays map
+    	} else if (userInput.equals("m")) {    				    // Displays map
     		World.map();
-    	} else if (command.equals("l")) {						// Looks around location
+    	} else if (userInput.equals("l")) {						// Looks around location
     		Player.look();
-    	} else if (command.equals("h")) {    				    // Displays help menu
+    	} else if (userInput.equals("h")) {    				    // Displays help menu
     		JOptionPane.showMessageDialog(frame, HELP_MSG);;
-    	} else if (command.equals("q")) {    				    // Quits game
+    	} else if (userInput.equals("q")) {    				    // Quits game
     		quit();
     	
     	} else if (command.equals("t")) {    				    // Takes item
@@ -158,13 +161,13 @@ public class GameEngine {
    				}
    			}
    			
-   		} else if (command.equals("talk")) {
+   		} else if (userInput.equals("talk")) {
    			Player.interactWithSpecialItem(4, 6);
    			
-   		} else if (command.equals("smile")) {
+   		} else if (userInput.equals("smile")) {
    			Player.interactWithSpecialItem(1, 3);
    		
-   		} else if (command.equals("ring")) {
+   		} else if (userInput.equals("ring") || userInput.equals("ring bell")) {
    			Player.interactWithSpecialItem(5, 7);
    			END_GAME_SCENARIO = true;
    			Player.displayHealthStats();
@@ -173,26 +176,30 @@ public class GameEngine {
    			errorMessage();
    		}
        
+       
+        // End Game commands
         } else {
         
-        if (command.equals("q")) {    				    	    // Quits game
+        if (userInput.equals("q")) {    				    	               // Quits game
         	quit();
 		
-        } else if (command.equals("p")) {
+        } else if (userInput.equals("p")) {								   // Punches
         	Player.punch();
        
-        } else if (command.equals("use")) {
+        } else if (command.equals("use")) {								   // Uses grocery items to fight with
         	String item = nextToken;
         	if (item == null) {
-        		informationMessage("Enter an item you want to use.");
+        		warningMessage("Enter an item you want to use.");
+        	} else if (item.equals("map") || item.equals("flyer")) {
+        		warningMessage("No, a grocery item.");
         	} else if (searchArr(item)) {
         		int index = getIndex(item);
         		if (World.items.get(index).getTaken() == true) {
         			Player.use(World.items.get(index));
-        		}
-        		
+        		}	
         	} 
         }
+        
         }
         
         	
@@ -264,21 +271,29 @@ public class GameEngine {
 	}
 	
 	
+	/**
+	 * The updateStatus method updates the player's status information
+	 */
 	public static void updateStatus() {
-		currentLocInfo.setText("Current Location: " + World.locs.get(Player.currentLoc).getName()); 
-		movesInfo.setText("Total Moves: " + Player.totalMoves);
-		backtrackInfo.setText("Steps from Beginning: " + BreadCrumbTrail.stepsFromBeg);
+		currentLocInfo.setText("<html> <u>Current Location</u>: " + World.locs.get(Player.currentLoc).getName() + "</html>"); 
+		movesInfo.setText("<html> <u>Total Moves</u>: " + Player.totalMoves + "</html>");
+		backtrackInfo.setText("<html> <u>Steps from Beginning</u>: " + BreadCrumbTrail.stepsFromBeg + "</html>");
 		directionsInfo.setText(World.locs.get(Player.currentLoc).getDir());
 	}
 	
+	
+	/**
+	 * The buildStatusInfo method creates a panel to contain all the player's current information
+	 */
 	private JPanel buildStatusInfo() {
 		
 		currentLocInfo = new JLabel();
+		
+		directionsLabel = new JLabel("<html> <u>Directions Available</u>: </html>");
+		directionsInfo = new JLabel();
+		
 		movesInfo = new JLabel();
 		backtrackInfo = new JLabel();
-		
-		JLabel dir = new JLabel("Directions available:");
-		directionsInfo = new JLabel();
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -286,14 +301,13 @@ public class GameEngine {
 			panel.add(Box.createVerticalStrut(10));
 		panel.add(currentLocInfo);
 			panel.add(Box.createVerticalStrut(10));
-		panel.add(dir);
+		panel.add(directionsLabel);
 		panel.add(directionsInfo);
 			panel.add(Box.createVerticalStrut(10));
 		panel.add(movesInfo);
 		panel.add(backtrackInfo);
 		updateStatus();
 		return panel;
-
 		
 	}
 	
@@ -361,6 +375,7 @@ public class GameEngine {
     		+ "S - move south \n"
     		+ "E - move east \n"
     		+ "W - move west \n"
+    		+ "L - look around room \n"
     		+ "T [ITEM_NAME] - take item \n"
     		+ "D [ITEM_NAME] - drop item \n"
     		+ "B [NUMBER_OF_STEPS] - backtrack a specified number of steps \n"
