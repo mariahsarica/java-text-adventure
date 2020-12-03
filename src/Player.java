@@ -4,6 +4,9 @@
  */
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import javax.swing.JOptionPane;
 
 
 public class Player {
@@ -11,9 +14,24 @@ public class Player {
 	public static int currentLoc;									  // Current location of the player
 	public static ArrayList<Item> inventory = new ArrayList<Item>();  // ArrayList of type Item to hold items present in the player's inventory
 	public static int totalMoves = 0;                                 // Keeps track of total number of moves player has made throughout the game
+	public static String name = getUserName();						  // Name of player
 	
-	public Player() {
+	private static int playerHealth = 100;							  // Player health
+	private static int bossHealth = 150;						      // Boss health
+	
+	
+	/**
+	 * The getUserName method prompts the user to enter a name before the game starts.
+	 */
+	private static String getUserName() {
+		String name;
+		name = JOptionPane.showInputDialog(GameEngine.frame, "Enter your name below.", "Enter your name", JOptionPane.PLAIN_MESSAGE);
+		while (name == null || name.equals("")) {
+			name = JOptionPane.showInputDialog(GameEngine.frame, "Enter your name below.", "Enter your name", JOptionPane.PLAIN_MESSAGE);
+		}
+		return name.trim();
 	}
+	
 	
 	/**
 	 * The takeCart method is a special case of the takeItem method, as the
@@ -21,16 +39,20 @@ public class Player {
 	 * @param cart 
 	 */
 	public static void takeCart(Item cart) {
-		if (cart.getTaken() == false) {
-			if (currentLoc == 0) {
-				GameEngine.output.append(cart.getDescrip());
-				cart.setTaken(true);
-				GameEngine.inv.setText("Your cart currently has: \n\n");
+		if (World.locs.get(0).hasViewed == true) {
+			if (cart.getTaken() == false) {
+				if (currentLoc == 0) {
+					GameEngine.output.append(cart.getDescrip());
+					cart.setTaken(true);
+					GameEngine.inv.setText("Your cart currently has: \n\n");
+				} else {
+					GameEngine.informationMessage("Not in this room!");
+				}
 			} else {
-				GameEngine.informationMessage("Not in this room!");
+				GameEngine.informationMessage("You already have a cart!");
 			}
 		} else {
-			GameEngine.informationMessage("You already have a cart!");
+			GameEngine.informationMessage("You must look around the room before you can take any items.");
 		}
 	}
 	
@@ -40,23 +62,27 @@ public class Player {
 	 * @param item Index of item to be taken.
 	 */
 	public static void takeItem(Item item) {
-		if (item.getTakable() == true) {
-			if (World.items.get(0).getTaken() == true) {
+		if (World.locs.get(currentLoc).hasViewed == true) {
+			if (item.getTakable() == true) {
 				if (item.getTaken() == false) {
-					if (currentLoc == item.locId) {
-						addToInv(item);
-						GameEngine.output.append(item.getDescrip());
+					if (World.items.get(0).getTaken() == true) {
+						if (currentLoc == item.locId) {
+							addToInv(item);
+							GameEngine.output.append(item.getDescrip());
+						} else {
+							GameEngine.errorMessage();
+						}
 					} else {
-						GameEngine.informationMessage("Not in this room!");
+						GameEngine.informationMessage("You have nothing to put your groceries in!");
 					}
 				} else {
 					GameEngine.informationMessage("Check your cart, you already have this item!");
 				}
 			} else {
-				GameEngine.informationMessage("You have nothing to put your groceries in!");
+				GameEngine.errorMessage();
 			}
 		} else {
-			GameEngine.errorMessage();
+			GameEngine.informationMessage("You must look around the room before you can take any items.");
 		}
 	}
 	
@@ -94,7 +120,7 @@ public class Player {
 				removeFromInv(item);
 				GameEngine.output.append("You have dropped the " + item.getName().toLowerCase() + ".\n\n");
 			} else {
-				GameEngine.informationMessage("You don't have this item.");
+				GameEngine.errorMessage();
 			}
 		} else {
 			GameEngine.errorMessage();
@@ -124,8 +150,17 @@ public class Player {
 				currentLoc = BreadCrumbTrail.last.value;
 			}
 			totalMoves = totalMoves + 1; 
-			GameEngine.output.append(World.locs.get(currentLoc).getText());
+			GameEngine.output.append(World.locs.get(currentLoc).getLoc());
+			GameEngine.updateStatus();
 		}
+	}
+	
+	
+	/**
+	 * The look method displays the description of the location.
+	 */
+	public static void look() {
+		GameEngine.output.append(World.locs.get(currentLoc).getDescrip());
 	}
 	
 	
@@ -135,16 +170,132 @@ public class Player {
 	 * @param dir Index of direction the player wants to move in.
 	 */
 	public static void move(int dir) {
-		int newLoc = World.nav[currentLoc][dir];
-		if (newLoc < 0) {
-			GameEngine.warningMessage("You cannot go that way.");
+		if (totalMoves != 20) {
+			int newLoc = World.nav[currentLoc][dir];
+			if (newLoc < 0) {
+				GameEngine.warningMessage("You cannot go that way.");
+			} else {
+				currentLoc = newLoc;
+				totalMoves = totalMoves + 1;
+				BreadCrumbTrail.add(currentLoc);
+			}
+			GameEngine.output.append(World.locs.get(currentLoc).getLoc());  
+			GameEngine.updateStatus();
 		} else {
-			currentLoc = newLoc;
-			totalMoves = totalMoves + 1;
-			BreadCrumbTrail.add(currentLoc);
+			maxMovesReached();
 		}
-	   
-	   GameEngine.output.append(World.locs.get(currentLoc).getText());    
+	}
+	
+	/**
+	 * The interactWithSpecialItem method allows the user interact with characters that pop up in the game and other special items.
+	 * @param itemLocId Id of the location that the item is present in
+	 * @param itemId Id of the item in the items ArrayList
+	 */
+	public static void interactWithSpecialItem(int itemLocId, int itemId) {
+		if (currentLoc == itemLocId) {
+			if (World.locs.get(itemLocId).hasViewed == true) {
+				GameEngine.output.append(World.items.get(itemId).getDescrip());
+			} else {
+				GameEngine.errorMessage();
+			}
+		} else {
+			GameEngine.errorMessage();
+		}
+	}
+	
+	/**
+	 * The maxMovesReached method ends the game if the player has reached 20 moves.
+	 */
+	private static void maxMovesReached() {
+		GameEngine.warningMessage("Oh no! You have reached 20 moves! Game Over.");
+		GameEngine.quit();
+	}
+	
+	
+	/**
+	 * The randomNum method generates a random number from 1-20.
+	 */
+	public static int randomNum() {
+	    Random num = new Random();
+	    int randomNum = num.nextInt((20 - 1) + 1) + 1;
+	    return randomNum;
+	}
+	
+	
+	/**
+	 * The displayHealthStats method displays the player and boss' health values during the end game scenario
+	 */
+	public static void displayHealthStats() {
+		// Direction Labels will now hold the health stats
+		GameEngine.directionsLabel.setText("Your Health: " + playerHealth);   
+		GameEngine.directionsInfo.setText("Boss Health: " + bossHealth);
+		
+		GameEngine.movesInfo.setText("");
+		GameEngine.backtrackInfo.setText("");
+		
+		if (bossHealth < 1) {
+			GameEngine.informationMessage("YOU WIN!! YOU HAVE DEFEATED THE CABBAGE CRUSHER AND SAVED NATURE'S PANTRY!!");
+			GameEngine.quit();
+		}
+		if (playerHealth < 1) {
+			GameEngine.informationMessage("Dead");
+			GameEngine.quit();
+		}
+	}
+	
+	
+	/**
+	 * The attack method sets up a player attack, generates a random boss attack, and updates their health values
+	 * @param damage Amount of damage the player attack is worth
+	 * @param attackMsg Description of the player attack
+	 */
+	private static void attack(int damage, String attackMsg) {
+		
+		int playerAttack = damage;
+		GameEngine.output.append(attackMsg + playerAttack + " damage!!" + "\n");
+		
+		int bossAttack = 5 + randomNum();
+		GameEngine.output.append("BOOM! The Cabbage Crusher counters! -" + bossAttack + " health" + "\n\n");
+		
+		playerHealth = playerHealth - bossAttack;
+		bossHealth = bossHealth - playerAttack;	
+		
+	}
+
+	
+	/**
+	 * The punch method allows the player to punch as an attack on the boss
+	 */
+	public static void punch() {
+		attack(randomNum(), "POW! ");
+		
+		displayHealthStats();
+	}
+	
+	
+	/**
+	 * The use method allows the player to use a grocery item to attack then removes it from the inventory
+	 * @param item Item the player wants to use to attack
+	 */
+	public static void use(Item item) {
+		
+		if (item.getName() == "CELERY") {
+			attack(30, "BAM! You take out each stalk of celery and bash them over his cabbage head!! ");
+		
+		} else if (item.getName() == "QUINOA") {
+			attack(40, "WOOSH! You rip open your bag of quinoa and pour it all over the floor to make him fall on his cabbage butt! ");
+		
+		} else if (item.getName() == "TOFU") {
+			attack(50, "SLAAPPP!!! You open up your tofu and slap it all in his veggie face! ");
+			
+		} else if (item.getName() == "FLOUR") {
+			attack(50, "POOOFFF!! You tear open your bag of gluten free flour and it gets right in his brusselly eyes!! ");
+			
+		}
+			
+		removeFromInv(item);
+		displayHealthStats();
+		
 	}
 	
 }

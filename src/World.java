@@ -34,15 +34,15 @@ public class World {
 		
 		// Flyer
 		Item flyer = new Item(1, "FLYER", true);
-		flyer.setDescrip("You skim the flyer... Weekly Specials: 'gross' ... 'eww' "
-				+ "oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic "
+		flyer.setDescrip("You skim the flyer... \nWeekly Specials: 'gross' ... 'eww' ... "
+				+ "Oooo! QUINOA on sale in bulk for $1.99/lb!! and discount organic "
 				+ "CELERY for 75¢!!! Don't miss out on these KILLER deals!!!");
 		flyer.setLocId(0);
 		items.add(flyer);
 		
 		// Map
 		Item map = new Item(2, "MAP", true);
-		map.setDescrip("You have picked up a map of the store! Key in 'm' to view it.");
+		map.setDescrip("You have picked up a map of the store! Key in 'M' to view it.");
 		map.setLocId(0);
 		items.add(map);
 		
@@ -70,64 +70,99 @@ public class World {
 		crazyGuy.setLocId(4);
 		items.add(crazyGuy);
 		
+		// Bell
+		Item bell = new Item(7, "BELL", false);
+		bell.setDescrip("A shadowy figure emerges from the back... AHHHH IT'S THE CABBAGE CRUSHER!! \n"
+				+ "No turning back now, you must defeat him! \n"
+				+ "To fight using your grocery items type \"Use [ITEM_NAME]\", or \n"
+				+ "type 'P' to punch!");
+		bell.setLocId(5);
+		items.add(bell);
+		
+		// GF Flour
+		Item flour = new Item(8, "FLOUR", true);
+		flour.setDescrip("*Checks flour off list*");
+		flour.setLocId(7);
+		items.add(flour);
+		
+		Item tofu = new Item(9, "TOFU", true);
+		tofu.setDescrip("Yummm can't wait to grill this up later!");
+		tofu.setLocId(6);
+		items.add(tofu);
+		
 		
 		/**
 		 * LOCATIONS
 		 */
 		// Lobby
 		Location lobby = new Location(0, "Lobby");
-		lobby.setDescrip("You are in the lobby. There is a row of shopping CARTS to your right "
+		lobby.setLoc("You are in the lobby.");
+		lobby.setDescrip("There is a row of shopping CARTS to your right "
 				+ "and a stand of FLYERS and MAPS to your left.");
-		lobby.setDir("North-Produce, West-Cash Registers");
+		lobby.setDir("<html>&emsp; <b>North</b> - Produce           <br>"
+					     + "&emsp; <b>West</b>  - Cash Registers </html>");
 		locs.add(lobby);
 		
 		// Cash Registers
 		Location registers = new Location(1, "Cash Registers");
-		registers.setDescrip("You are by the cash registers. You lock eyes with the CASHIER, quick, make a move.");
-		registers.setDir("North-Aisle 3, East-Lobby");
+		registers.setLoc("You are by the cash registers.");
+		registers.setDescrip("You lock eyes with the CASHIER, quick, make a move. \nEnter \"smile\" to smile.");
+		registers.setDir("<html>&emsp; <b>North</b> - Aisle 3    <br>"
+						     + "&emsp; <b>East</b>  - Lobby   </html>");
 		locs.add(registers);
 		
 		// Produce
 		Location produce = new Location(2, "Produce");
-		produce.setDescrip("You are in the produce section. Ahh there is that really "
-				+ "cheap organic CELERY!");
-		produce.setDir("North-Bulk, West-Aisle 3, South-Lobby");
+		produce.setLoc("You are in the produce section.");
+		produce.setDescrip("Ahh there is that really cheap organic CELERY!");
+		produce.setDir("<html>&emsp; <b>North</b> - Bulk       <br>"
+						   + "&emsp; <b>West</b>  - Aisle 3    <br>"
+						   + "&emsp; <b>South</b> - Lobby   </html>");
 		locs.add(produce);
 		
 		// Bulk
 		Location bulk = new Location(3, "Bulk");
-		bulk.setDescrip("You are in the bulk section. Oooo so many options, I really "
-				+ "only came in for almond milk and tofu.... but the QUINOA is such a great deal!");
-		bulk.setDir("South-Produce");
+		bulk.setLoc("You are in the bulk section.");
+		bulk.setDescrip("Oooo so many options, I really only came in for flour and tofu.... but the QUINOA is such a great deal!");
+		bulk.setDir("<html>&emsp; <b>South</b> - Produce </html>");
 		locs.add(bulk);
 		
 		// Aisle 3
 		Location aisle3 = new Location(4, "Aisle 3");
-		aisle3.setDescrip("You are in Aisle 3. A CRAZY GUY starts running down the aisle!");
-		aisle3.setDir("North-Deli, West-Aisle 2, East-Produce, South-Cash Registers");
+		aisle3.setLoc("You are in Aisle 3.");
+		aisle3.setDescrip("A CRAZY GUY starts running down the aisle! \nEnter \"talk\" to see what he has to say.");
+		aisle3.setDir("<html>&emsp; <b>North</b> - Deli              <br>"
+						  + "&emsp; <b>West</b>  - Aisle 2           <br>"
+						  + "&emsp; <b>East</b>  - Produce           <br>"
+						  + "&emsp; <b>South</b> - Cash Registers </html>");
 		locs.add(aisle3);
 		
 		// Deli
 		Location deli = new Location(5, "Deli");
-		deli.setDescrip("You are in the deli section. No one seems to be around. There is a "
-				+ "sign that reads, 'RING BELL for service'.\n\n");
-		deli.setDir("West-Dairy, South-Aisle 3");
+		deli.setLoc("You are in the deli section.");
+		deli.setDescrip("No one seems to be around. There is a sign that reads, 'RING BELL for service'. \n"
+				+ "Enter \"ring bell\" to ring the bell..... If you dare.");
+		deli.setDir("<html>&emsp; <b>West</b>  - Dairy      <br>"
+						+ "&emsp; <b>South</b> - Aisle 3 </html>");
 		locs.add(deli);
 		
 		// Dairy
 		Location dairy = new Location(6, "Dairy");
-		dairy.setDescrip("You are in the dairy section. There is the ALMOND MILK and TOFU "
-				+ "I came in for!");
-		dairy.setDir("East-Deli, South-Aisle 2");
+		dairy.setLoc("You are in the dairy section.");
+		dairy.setDescrip("There is the TOFU I came in for!");
+		dairy.setDir("<html>&emsp; <b>East</b>  - Deli       <br>"
+						 + "&emsp; <b>South</b> - Aisle 2 </html>");
 		locs.add(dairy);
 		
 		// Aisle 2
 		Location aisle2 = new Location(7, "Aisle 2");
-		aisle2.setDescrip("You are in Aisle 2. Ahhh gluten free FLOUR! Might "
-				+ "as well get it while I'm here.");
-		aisle2.setDir("North-Dairy, East-Aisle 3");
+		aisle2.setLoc("You are in Aisle 2.");
+		aisle2.setDescrip("Ahhh gluten free FLOUR! And for the low price of $2.31! This store never ceases to surprise me :)");
+		aisle2.setDir("<html>&emsp; <b>North</b> - Dairy      <br>"
+						  + "&emsp; <b>East</b>  - Aisle 3 </html>");
 		locs.add(aisle2);
 	
+		
 		/**
 		 * Navigation Matrix
 		 */
@@ -145,6 +180,7 @@ public class World {
 		};
 		
 	}
+	
 	
 	/**
 	 * The map method displays a map of NATURE'S PANTRY (only if the user has picked it up).

@@ -3,6 +3,8 @@
  * @author Mariah Molenaer
  */
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,17 +25,25 @@ import java.awt.event.ActionEvent;
 
 public class GameEngine {
 
-	private static JFrame frame;
+	static JFrame frame;
 	private JTextField input;
-	public static JTextArea output;
-	public static JTextArea inv;
+	static JTextArea output;
+	static JTextArea inv;
 	
+	static JLabel currentLocInfo;
+	static JLabel movesInfo;
+	static JLabel backtrackInfo;
+	static JLabel directionsLabel;
+	static JLabel directionsInfo;
+	
+	// Ringing the bell in the deli triggers the end game scenario and player is unable to execute commands.
+	// Game flows normally if false.
+	private static boolean END_GAME_SCENARIO = false;
 	
 	/**
 	 * Constructor
 	 */
 	public GameEngine() {
-		final GameEngine eng = this;
 		
 		JPanel gui = buildGUI();
 		
@@ -42,10 +52,10 @@ public class GameEngine {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 		    public void windowClosing(WindowEvent e) {
-		        eng.showGoodbye();
+		        showGoodbye();
 		    }
 		});
-		frame.getContentPane().setPreferredSize(new Dimension(500, 400));
+		frame.getContentPane().setPreferredSize(new Dimension(850, 450));
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 	}
@@ -75,10 +85,12 @@ public class GameEngine {
 	 */
 	private void commandReader() {
 		
-		String userInput = this.getInput();
-        String command;
-        String nextToken;
-        	
+		// Used to read commands without spaces
+		String userInput = this.getInput().toLowerCase();
+        
+		// Used to read commands with spaces
+		String command;
+        String nextToken;	
         if (userInput.contains(" ")) {
         	String [] rawInput = userInput.split(" ");
         	command = rawInput[0].toLowerCase();
@@ -87,20 +99,25 @@ public class GameEngine {
         	command = userInput.toLowerCase();
         	nextToken = null;
         }
-        	
-        	   if (command.equals("n")) {    				    // Moves north
+        
+        
+        if (END_GAME_SCENARIO == false) { 
+        
+        	   if (userInput.equals("n")) {    				    // Moves north
         	Player.move(0);
-    	} else if (command.equals("s")) {    			        // Moves south
+    	} else if (userInput.equals("s")) {    			        // Moves south
     		Player.move(1);
-    	} else if (command.equals("e")) {    				    // Moves east
+    	} else if (userInput.equals("e")) {    				    // Moves east
     		Player.move(2);
-    	} else if (command.equals("w")) {    				    // Moves west
+    	} else if (userInput.equals("w")) {    				    // Moves west
     		Player.move(3);
-    	} else if (command.equals("m")) {    				    // Displays map
+    	} else if (userInput.equals("m")) {    				    // Displays map
     		World.map();
-    	} else if (command.equals("h")) {    				    // Displays help menu
+    	} else if (userInput.equals("l")) {						// Looks around location
+    		Player.look();
+    	} else if (userInput.equals("h")) {    				    // Displays help menu
     		JOptionPane.showMessageDialog(frame, HELP_MSG);;
-    	} else if (command.equals("q")) {    				    // Quits game
+    	} else if (userInput.equals("q")) {    				    // Quits game
     		quit();
     	
     	} else if (command.equals("t")) {    				    // Takes item
@@ -109,7 +126,7 @@ public class GameEngine {
     			errorMessage();
     		} else if (item.equals("cart")) {
     			Player.takeCart(World.items.get(0));
-   			} else if (search(item)) {
+   			} else if (searchArr(item)) {
    				int index = getIndex(item);
    				Player.takeItem(World.items.get(index));
    			} else {
@@ -118,7 +135,9 @@ public class GameEngine {
    			
    		} else if (command.equals("d")) {					    // Drops item
    			String item = nextToken;
-   			if (search(item)) {
+   			if (item == null) {
+   				errorMessage();
+   			} else if (searchArr(item)) {
    				int index = getIndex(item);
    				Player.drop(World.items.get(index));
    				if (item.equals("cart")) {
@@ -141,10 +160,48 @@ public class GameEngine {
    					errorMessage();
    				}
    			}
+   			
+   		} else if (userInput.equals("talk")) {
+   			Player.interactWithSpecialItem(4, 6);
+   			
+   		} else if (userInput.equals("smile")) {
+   			Player.interactWithSpecialItem(1, 3);
    		
+   		} else if (userInput.equals("ring") || userInput.equals("ring bell")) {
+   			Player.interactWithSpecialItem(5, 7);
+   			END_GAME_SCENARIO = true;
+   			Player.displayHealthStats();
+   			
    		} else {
    			errorMessage();
    		}
+       
+       
+        // End Game commands
+        } else {
+        
+        if (userInput.equals("q")) {    				    	               // Quits game
+        	quit();
+		
+        } else if (userInput.equals("p")) {								   // Punches
+        	Player.punch();
+       
+        } else if (command.equals("use")) {								   // Uses grocery items to fight with
+        	String item = nextToken;
+        	if (item == null) {
+        		warningMessage("Enter an item you want to use.");
+        	} else if (item.equals("map") || item.equals("flyer")) {
+        		warningMessage("No, a grocery item.");
+        	} else if (searchArr(item)) {
+        		int index = getIndex(item);
+        		if (World.items.get(index).getTaken() == true) {
+        			Player.use(World.items.get(index));
+        		}	
+        	} 
+        }
+        
+        }
+        
         	
 	}
 	
@@ -167,13 +224,13 @@ public class GameEngine {
 	
 	
 	/**
-	 * The search method is used in the take and drop actions. It searches the ArrayList of items
+	 * The searchArr method is used in the take and drop actions. It searches the ArrayList of items
 	 * to see if it contains the item the user wants to take/drop.
 	 * @param item Name of item user wants to take/drop
 	 * @return true if the item is in the ArrayList
 	 * 		   false if it is not
 	 */
-	private boolean search(String item) {
+	private boolean searchArr(String item) {
         for (int i = 0; i < World.items.size(); i++) {
         	if (item.equalsIgnoreCase(World.items.get(i).getName())) {
         		return true;
@@ -215,6 +272,47 @@ public class GameEngine {
 	
 	
 	/**
+	 * The updateStatus method updates the player's status information
+	 */
+	public static void updateStatus() {
+		currentLocInfo.setText("<html> <u>Current Location</u>: " + World.locs.get(Player.currentLoc).getName() + "</html>"); 
+		movesInfo.setText("<html> <u>Total Moves</u>: " + Player.totalMoves + "</html>");
+		backtrackInfo.setText("<html> <u>Steps from Beginning</u>: " + BreadCrumbTrail.stepsFromBeg + "</html>");
+		directionsInfo.setText(World.locs.get(Player.currentLoc).getDir());
+	}
+	
+	
+	/**
+	 * The buildStatusInfo method creates a panel to contain all the player's current information
+	 */
+	private JPanel buildStatusInfo() {
+		
+		currentLocInfo = new JLabel();
+		
+		directionsLabel = new JLabel("<html> <u>Directions Available</u>: </html>");
+		directionsInfo = new JLabel();
+		
+		movesInfo = new JLabel();
+		backtrackInfo = new JLabel();
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setPreferredSize(new Dimension(206, 0));
+			panel.add(Box.createVerticalStrut(10));
+		panel.add(currentLocInfo);
+			panel.add(Box.createVerticalStrut(10));
+		panel.add(directionsLabel);
+		panel.add(directionsInfo);
+			panel.add(Box.createVerticalStrut(10));
+		panel.add(movesInfo);
+		panel.add(backtrackInfo);
+		updateStatus();
+		return panel;
+		
+	}
+	
+	
+	/**
 	 * The buildGUI method puts together all the input controls and output styles for the GUI.
 	 */
 	private JPanel buildGUI() {
@@ -230,15 +328,17 @@ public class GameEngine {
    		title.setHorizontalAlignment(JLabel.CENTER);
 
    		JPanel inputsPanel = this.buildInputControls();
+   		JPanel statusPanel = this.buildStatusInfo();
    		
-   		inv = new JTextArea("You need something to put your groceries in! \n\n", 10, 10);
+   		inv = new JTextArea("You need something to put your groceries in! \n\n", 0, 13);
    		inv.setEditable(false);
    		inv.setLineWrap(true);
    		inv.setWrapStyleWord(true);
 
    		JPanel panel = new JPanel();
-   		panel.setLayout(new BorderLayout(20, 10));
+   		panel.setLayout(new BorderLayout(20, 0));
    		panel.add(title, BorderLayout.PAGE_START);
+   		panel.add(statusPanel, BorderLayout.LINE_START);
    		panel.add(scroll, BorderLayout.CENTER);
    		panel.add(inv, BorderLayout.LINE_END);
    		panel.add(inputsPanel, BorderLayout.PAGE_END);
@@ -258,7 +358,7 @@ public class GameEngine {
 	/**
 	 * The quit method exits the game and displays a goodbye message to the user.
 	 */
-	private void quit() {
+	public static void quit() {
 		showGoodbye();
 		frame.setVisible(false);
 		System.exit(0);
@@ -275,6 +375,7 @@ public class GameEngine {
     		+ "S - move south \n"
     		+ "E - move east \n"
     		+ "W - move west \n"
+    		+ "L - look around room \n"
     		+ "T [ITEM_NAME] - take item \n"
     		+ "D [ITEM_NAME] - drop item \n"
     		+ "B [NUMBER_OF_STEPS] - backtrack a specified number of steps \n"
@@ -287,26 +388,26 @@ public class GameEngine {
 	 * intro displays a introductory scene message to the user and starts the player in the lobby.
 	 */
 	private String intro =
-			"Welcome to NATURE’S PANTRY, your favorite "
+			"Welcome to NATURE’S PANTRY, " + Player.name + ", your favorite "
 			+ "alternative grocery store! \n"
-			+ "What was it that I needed to get again? Oh yeah, "
-			+ "almond milk and tofu. \n\n"
-			+ World.locs.get(Player.currentLoc).getText();
+			+ "What was it that I needed to get again? Oh yeah! "
+			+ "Gluten free flour and tofu. Sounds like an easy enough plan... \n\n"
+			+ World.locs.get(Player.currentLoc).getLoc();
 
 	
 	/**
 	 * The showWelcome method informs the user that they are going to be starting the game.
 	 */
 	private void showWelcome() {
-    	JOptionPane.showMessageDialog(frame, "Welcome to NATURE'S PANTRY, click OK to being the game!");
+    	JOptionPane.showMessageDialog(frame, "Welcome to NATURE'S PANTRY, " + Player.name + ", click OK to being the game!");
     }
 	
 	
 	/**
 	 * The showGoodbye method informs the user that the game is over.
 	 */
-	private void showGoodbye() {
-    	JOptionPane.showMessageDialog(frame, "Thank you for visiting Nature's Pantry!");
+	private static void showGoodbye() {
+    	JOptionPane.showMessageDialog(frame, "Thank you for visiting Nature's Pantry, " + Player.name + "!");
     }
 	
 	
